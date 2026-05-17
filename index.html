@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+<!-- WordPress theme CSS for header/footer -->
+<link rel='stylesheet' href='wp-content/themes/salient/css/font-awesome-legacy.min6996.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/grid-systemf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/stylef411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/header/header-layout-centered-menuf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/header/header-megamenuf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/lineconf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/nectar-brandsf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/responsivef411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/plugins/weglot/dist/css/front-cssde54.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/plugins/weglot/dist/css/new-flagsde54.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/uploads/salient/menu-dynamic13a6.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/uploads/salient/salient-dynamic-stylesa9b7.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/plugins/js_composerf411.css' type='text/css' media='all' />
+<link rel='stylesheet' href='wp-content/themes/salient/css/build/skin-materialf411.css' type='text/css' media='all' />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
@@ -11,12 +26,8 @@
   window.addEventListener('pageshow', () => window.scrollTo(0, 0));
 </script>
 <title>Heli-Flights · R44</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <!-- Preload the biggest blocking assets so the network starts fetching them
      as soon as the HTML arrives, in parallel with the three.js CDN script. -->
 <link rel="preload" href="env.hdr" as="fetch" type="image/vnd.radiance" crossorigin>
@@ -36,9 +47,9 @@
     --dim-08:rgba(0,0,0,0.08);
     --accent:#8e0000;
     --accent-2:#f6f6f6;
-    --display:'Bricolage Grotesque', 'Times New Roman', serif;
-    --body:   'Inter Tight', system-ui, sans-serif;
-    --mono:   'JetBrains Mono', ui-monospace, monospace;
+    --display:'Helvetica Neue', 'Arial', sans-serif;
+    --body:   'Helvetica Neue', 'Arial', sans-serif;
+    --mono:   'Helvetica Neue', ui-monospace, monospace;
     --pad:   clamp(2rem, 4vw, 5rem);
   }
 
@@ -1222,6 +1233,17 @@
     .svc-dashes { left: auto; right: var(--pad); }
   }
 
+  /* ═══════ 3D PAGE OVERRIDES (keep body background above WP theme reset) ═══════ */
+  html, body {
+    background:
+      radial-gradient(ellipse 70vw 60vh at 72% 45%, #f1ede8 0%, transparent 60%),
+      radial-gradient(ellipse 60vw 55vh at 28% 145%, #efeff3 0%, transparent 60%),
+      var(--bg) !important;
+  }
+
+  /* WP header z-index: must sit above WebGL canvas (z:1) */
+  #header-outer { z-index: 50 !important; }
+
   /* ═══════ SITE NAV ═══════ */
   .site-nav {
     position: fixed;
@@ -1459,21 +1481,40 @@
   <!-- WebGL canvas -->
   <canvas id="webgl"></canvas>
 
-  <!-- Navigation -->
-  <nav class="site-nav" id="siteNav" role="navigation" aria-label="Hoofdnavigatie">
-    <a href="index.html" class="site-nav-brand">HELI-FLIGHTS</a>
-    <button class="site-nav-toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="site-nav-links" id="navLinks" role="list">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="onze-diensten/index.html">Diensten</a></li>
-      <li><a href="over-ons/index.html">Over ons</a></li>
-      <li><a href="veelgestelde-vragen/index.html">FAQ</a></li>
-      <li><a href="contacteer/index.html">Contacteer</a></li>
-      <li><a href="contact-b2b/index.html" class="site-nav-b2b">B2B</a></li>
-    </ul>
-  </nav>
+  <!-- WordPress header (same as all other pages) -->
+  <div class="ocm-effect-wrap"><div class="ocm-effect-wrap-inner">
+  <div id="header-space" data-header-mobile-fixed='1'></div>
+  <div id="header-outer" data-has-menu="true" data-has-buttons="yes" data-header-button_style="default" data-using-pr-menu="false" data-mobile-fixed="1" data-ptnm="1" data-lhe="button_bg" data-user-set-bg="#ffffff" data-format="centered-menu" data-permanent-transparent="false" data-megamenu-rt="1" data-remove-fixed="0" data-header-resize="1" data-cart="true" data-transparency-option="" data-box-shadow="none" data-shrink-num="6" data-using-secondary="0" data-using-logo="1" data-logo-height="60" data-m-logo-height="40" data-padding="32" data-full-width="true" data-condense="false">
+  <header id="top" role="banner" aria-label="Main Menu">
+    <div class="container">
+    <div class="row">
+      <div class="col span_3">
+        <a id="logo" href="index.html">
+          <img class="stnd skip-lazy dark-version" width="512" height="512" alt="Heli-flights" src="wp-content/uploads/2026/01/cropped-heli-logo-red%404x-scaled-1.png" />
+        </a>
+      </div>
+      <div class="col span_9 col_last">
+        <a id="mobile-cart-link" aria-label="Cart" data-cart-style="slide_in_click" href="cart/index.html"><i class="icon-salient-cart"></i><div class="cart-wrap"><span>0</span></div></a>
+        <div class="slide-out-widget-area-toggle mobile-icon slide-out-from-right" data-custom-color="true" data-icon-animation="simple-transform">
+          <div><a href="#slide-out-widget-area" role="button" aria-label="Navigation Menu" aria-expanded="false" class="closed">
+            <span class="screen-reader-text">Menu</span><span aria-hidden="true"><i class="lines-button x2" data-variant="even_lines"><i class="lines"></i></i></span>
+          </a></div>
+        </div>
+        <nav aria-label="Main Menu">
+          <ul class="sf-menu">
+            <li class="menu-item menu-item-1020 megamenu nectar-megamenu-menu-item align-right width-100 menu-item-icon-alignment-right menu-item-has-icon button_solid_color"><a href="prive-rondvlucht-aanvraag/index.html"><i class="nectar-menu-icon fa fa-angle-right" role="presentation"></i><span class="menu-title-text">Vlieg nu</span></a></li>
+          </ul>
+          <ul class="buttons sf-menu" data-user-set-ocm="1">
+            <li class="nectar-header-text-content-wrap"><div class="nectar-header-text-content"><div><span style="font-family:system-ui;font-size:14px"><aside data-wg-notranslate="" class="country-selector weglot-dropdown close_outside_click closed weglot-shortcode wg-" tabindex="0" aria-expanded="false" aria-label="Language selected: Dutch"><input id="wg-toggle-nl" class="weglot_choice" type="checkbox" name="menu"/><label data-l="nl" tabindex="-1" for="wg-toggle-nl" class="wgcurrent wg-li weglot-lang weglot-language weglot-flags flag-3 wg-nl" data-code-language="wg-nl" data-name-language="NL"><span class="wglanguage-name">NL</span></label><ul role="none"><li data-l="en" class="wg-li weglot-lang weglot-language weglot-flags flag-3 wg-en" data-code-language="en" role="option"><a title="Language switcher : English" class="weglot-language-en" role="option" href="en/index.html">EN</a></li></ul></aside></span></div></div></li>
+            <li class="slide-out-widget-area-toggle" data-icon-animation="simple-transform" data-custom-color="true"><div><a href="#slide-out-widget-area" aria-label="Navigation Menu" aria-expanded="false" role="button" class="closed"><span class="screen-reader-text">Menu</span><span aria-hidden="true"><i class="lines-button x2" data-variant="even_lines"><i class="lines"></i></i></span></a></div></li>
+          </ul>
+        </nav>
+        <div class="logo-spacing" data-using-image="true"><img class="hidden-logo skip-lazy" alt="Heli-flights" width="512" height="512" src="wp-content/uploads/2026/01/cropped-heli-logo-red%404x-scaled-1.png" /></div>
+      </div>
+    </div>
+    </div>
+  </header>
+  </div>
 
   <!-- Fixed UI -->
   <div class="coords">LAT 50.85°N · LON 04.35°E</div>
@@ -2916,74 +2957,450 @@
   })();
   </script>
 
-  <script>
-    /* Mobile nav toggle */
-    (function() {
-      const btn = document.getElementById('navToggle');
-      const links = document.getElementById('navLinks');
-      if (!btn || !links) return;
-      btn.addEventListener('click', function() {
-        const open = links.classList.toggle('open');
-        btn.classList.toggle('open', open);
-        btn.setAttribute('aria-expanded', open);
-      });
-    })();
-  </script>
+<div class="nectar-global-section nectar_hook_global_section_footer" role="complementary" aria-label="Additional site information"><div class="container normal-container row"> 
+		<div id="fws_6a0a1348a3e6b"  data-column-margin="20px" data-midnight="light" data-top-percent="2%"  class="wpb_row vc_row-fluid vc_row full-width-content has-row-bg-color vc_row-o-equal-height vc_row-flex vc_row-o-content-top  right_padding_7pct left_padding_7pct"  style="padding-top: calc(100vw * 0.02); padding-bottom: 0px; --row-bg-color: #111111;"><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="false"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop using-bg-color"  style="background-color: #111111; "></div></div></div><div class="row_col_wrap_12 col span_12 light left">
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding max_width_desktop_260px force-desktop-text-align-left inherit_tablet inherit_phone "  data-padding-pos="right" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a3f90" data-midnight="" data-column-margin="70px" class="wpb_row vc_row-fluid vc_row inner_row vc_row-o-equal-height vc_row-flex"  style="padding-top: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "    data-t-w-inherits="small_desktop" data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>Navigatie</h4>
+</div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="site-footer-grid">
-        <div class="site-footer-col">
-          <h4>Navigatie</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="onze-diensten/index.html">Onze diensten</a></li>
-            <li><a href="over-ons/index.html">Over ons</a></li>
-            <li><a href="contacteer/index.html">Contacteer</a></li>
-            <li><a href="veelgestelde-vragen/index.html">Veelgestelde vragen</a></li>
-          </ul>
-        </div>
-        <div class="site-footer-col">
-          <h4>B2C Diensten</h4>
-          <ul>
-            <li><a href="prive-rondvlucht/index.html">Privé rondvlucht</a></li>
-            <li><a href="zelf-vliegen/index.html">Zelf vliegen</a></li>
-            <li><a href="gedeelde-vlucht/index.html">Gedeelde vlucht</a></li>
-            <li><a href="cadeaubonnen/index.html">Cadeaubonnen</a></li>
-            <li><a href="huwelijksaanzoek/index.html">Huwelijksaanzoek</a></li>
-            <li><a href="trouwvlucht/index.html">Trouwvlucht</a></li>
-          </ul>
-        </div>
-        <div class="site-footer-col">
-          <h4>B2B Diensten</h4>
-          <ul>
-            <li><a href="contact-b2b/index.html">Inspectievluchten</a></li>
-            <li><a href="contact-b2b/index.html">Evenementen</a></li>
-            <li><a href="contact-b2b/index.html">Taxivluchten</a></li>
-            <li><a href="contact-b2b/index.html">Campagnes</a></li>
-            <li><a href="contact-b2b/index.html">Fotografie &amp; Videografie</a></li>
-          </ul>
-        </div>
-        <div class="site-footer-col site-footer-contact">
-          <h4>Contacteer</h4>
-          <a href="mailto:info@heli-flights.be">info@heli-flights.be</a>
-          <a href="tel:+3233189106">03 318 91 06</a>
-          <p style="margin-top:1rem;color:rgba(255,255,255,0.35);">
-            Oostmalsesteenweg 236/3<br>
-            2520 Ranst
-          </p>
-          <ul style="margin-top:1.25rem;flex-direction:row;gap:0.75rem;">
-            <li><a href="algemene-voorwaarden/index.html">Algemene voorwaarden</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="site-footer-bottom">
-        <p>© 2026 Heli-Flights. Alle rechten voorbehouden.</p>
-        <p>Vintage 106 Bv · BE0790.660.460</p>
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a408a" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row  max_width_desktop_200px bottom_padding_tablet_15pct"  style="padding-top: 5%; padding-bottom: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding el_spacing_0px inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-right: 30px; margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" ><a  class="link_text" style="border-color: #ffffff;" role="button" href="index.html">Home</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 30px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="onze-diensten/index.html">Onze diensten</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="over-ons/index.html">Over ons</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contacteer/index.html">Contacteer</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="veelgestelde-vragen/index.html">Veelgestelde vragen</a></span></span></div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding max_width_desktop_260px force-desktop-text-align-left inherit_tablet inherit_phone "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a4329" data-midnight="" data-column-margin="70px" class="wpb_row vc_row-fluid vc_row inner_row vc_row-o-equal-height vc_row-flex"  style="padding-top: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "    data-t-w-inherits="small_desktop" data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>B2C Diensten</h4>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a440b" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row  max_width_desktop_200px bottom_padding_tablet_15pct"  style="padding-top: 2%; padding-bottom: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding force-desktop-text-align-left el_spacing_0px inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-right: 30px; margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" ><a  class="link_text" style="border-color: #ffffff;" role="button" href="prive-rondvlucht/index.html">Privé rondvlucht</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 30px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="zelf-vliegen/index.html">Zelf vliegen</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="gedeelde-vlucht/index.html">Gedeelde vlucht</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="cadeaubonnen/index.html">Cadeaubonnen</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="huwelijksaanzoek/index.html">Huwelijksaanzoek</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="trouwvlucht/index.html">Trouwvlucht</a></span></span></div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding max_width_desktop_260px force-desktop-text-align-left inherit_tablet inherit_phone "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a4771" data-midnight="" data-column-margin="70px" class="wpb_row vc_row-fluid vc_row inner_row vc_row-o-equal-height vc_row-flex"  style="padding-top: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "    data-t-w-inherits="small_desktop" data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>B2B Diensten</h4>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a489c" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row  max_width_desktop_200px bottom_padding_tablet_15pct"  style="padding-top: 5%; padding-bottom: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding el_spacing_0px inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-right: 30px; margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" ><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Inspectievluchten</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 30px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Evenementen</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Taxivluchten</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Campagnes</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="#">Bestickering</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Fotografie</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="contact-b2b/index.html">Videografie</a></span></span></div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding max_width_desktop_260px force-desktop-text-align-left inherit_tablet inherit_phone border_style_solid "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a4b92" data-midnight="" data-column-margin="70px" class="wpb_row vc_row-fluid vc_row inner_row vc_row-o-equal-height vc_row-flex"  style="padding-top: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "    data-t-w-inherits="small_desktop" data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>Legal</h4>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a4c6f" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row  max_width_desktop_200px bottom_padding_tablet_15pct"  style="padding-top: 5%; padding-bottom: 25%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding el_spacing_0px inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-right: 30px; margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" ><a  class="link_text" style="border-color: #ffffff;" role="button" href="algemene-voorwaarden/index.html">Algemene voorwaarden</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 30px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="#">Privacy beleid</a></span></span></div><div class="nectar-cta  alignment_tablet_default alignment_phone_default display_tablet_inherit display_phone_inherit " data-color="default" data-using-bg="false" data-display="inline" data-style="underline" data-alignment="left" data-text-color="custom" style="margin-bottom: 10px;  --nectar-text-color: #ffffff; --nectar-button-color: var(--nectar-default); --nectar-icon-gap: 10px; "><span style="color: #ffffff;" class="nectar-button-type"> <span class="link_wrap" style="padding-right: 25px; "><a  class="link_text" style="border-color: #ffffff;" role="button" href="#">Cookies</a></span></span></div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-4 wpb_column column_container vc_column_container col padding-10-percent no-extra-padding_tablet no-extra-padding_phone border_left_desktop_1px border_left_tablet_0px border_left_phone_0px border_top_tablet_1px border_top_phone_1px border_color_5e5e5e border_style_solid flex_gap_desktop_10px "  data-padding-pos="left" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a4e5f" data-midnight="" data-column-margin="90px" class="wpb_row vc_row-fluid vc_row inner_row  top_padding_tablet_15pct bottom_padding_tablet_10pct"  style="padding-top: 15%; padding-bottom: 5%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " style=" max-width: 500px; display: inline-block;">
+	<h2>Snelle service. Strak gepland.</h2>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a4f43" data-midnight="" data-column-margin="50px" class="wpb_row vc_row-fluid vc_row inner_row  max_width_desktop_600px top_padding_tablet_15pct bottom_padding_tablet_10pct"  style="padding-top: 15%; padding-bottom: 15%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-6 wpb_column column_container vc_column_container col child_column no-extra-padding force-desktop-text-align-left inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>Contacteer</h4>
+</div>
+
+
+
+
+<div class="wpb_text_column wpb_content_element " >
+	<p><a href="cdn-cgi/l/email-protection.html#c1a2aeafb5a0a2b581a9a4ada8eca7ada8a6a9b5b2efa3a4"><span class="__cf_email__" data-cfemail="7714181903161403371f121b1e5a111b1e101f0304591512">[email&#160;protected]</span></a><br />
+<a href="tel:03 318 91 06"><span aria-label="Telefoonnummer 03 318 91 06 bellen">03 318 91 06</span></a></p>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-6 wpb_column column_container vc_column_container col child_column no-extra-padding force-desktop-text-align-left inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<h4>Hoofdkantoor</h4>
+</div>
+
+
+
+
+<div class="wpb_text_column wpb_content_element " style=" max-width: 300px; display: inline-block;">
+	<p><a href="https://www.google.com/search?sca_esv=3fa20b0e5d950a51&amp;rlz=1C1HKFL_nlBE1192BE1193&amp;sxsrf=ANbL-n4r_G5PTX-Pyce8bfExtqGiyNSAwQ:1771513165011&amp;q=Heli-flights&amp;si=AL3DRZGNtcdgKOqVhotcr-UG2kkYpwR2WO4qu3O00NmpwBmLnaR4lKcAS-B-rRV_l0jILuCeyQ1NjYSdvgBQh3Gx-blCdUnBLZ18Y3fJmP__Zw2w0sgRUiM%3D&amp;sa=X&amp;ved=2ahUKEwidkann6OWSAxW2V6QEHemkC2sQ_coHegQIMhAB&amp;biw=1920&amp;bih=945&amp;dpr=1" target="_blank" rel="noopener">Oostmalsesteenweg 236/3<br />
+2520 Ranst</a></p>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+</div></div>
+		<div id="fws_6a0a1348a51a3"  data-column-margin="default" data-midnight="dark"  class="wpb_row vc_row-fluid vc_row full-width-content has-row-bg-color vc_row-o-equal-height vc_row-flex vc_row-o-content-top  vc_hidden-sm vc_hidden-xs right_padding_7pct left_padding_7pct"  style="padding-top: 0px; padding-bottom: 0px; --row-bg-color: #121212;"><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="false"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop using-bg-color"  style="background-color: #121212; "></div></div></div><div class="row_col_wrap_12 col span_12 dark left">
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone border_color_FFFFFF border_style_solid "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone border_color_FFFFFF border_style_solid "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				
+			</div> 
+		</div>
+	</div> 
+
+	<div  class="vc_col-sm-2 wpb_column column_container vc_column_container col no-extra-padding force-desktop-text-align-right column_element_direction_phone_horizontal el_spacing_5px inherit_tablet inherit_phone "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a53dd" data-midnight="" data-column-margin="custom" class="wpb_row vc_row-fluid vc_row inner_row  vc_custom_1771512454068 right_padding_0pct column-margin-0px"  style=""><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  right">
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="20px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-instagram"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="20px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-facebook"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="20px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-tiktok"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="20px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="fa fa-linkedin-square"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+</div></div>
+		<section id="fws_6a0a1348a567a"  data-column-margin="default" data-midnight="dark"  class="nectar_section wpb_row vc_row  flex_gap_desktop_10px"  style="padding-top: 0px; padding-bottom: 0px; "><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="false"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop"  style=""></div></div></div><div class="row_col_wrap_12 span_12 dark ">
+		<div id="fws_6a0a1348a56fd"  data-column-margin="default" data-midnight="dark"  class="wpb_row vc_row-fluid vc_row full-width-content has-row-bg-color vc_row-o-equal-height vc_row-flex vc_row-o-content-top  vc_hidden-lg vc_hidden-md right_padding_7pct left_padding_7pct left_padding_phone_7pct"  style="padding-top: 0px; padding-bottom: 0px; --row-bg-color: #121212;"><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="false"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop using-bg-color"  style="background-color: #121212; "></div></div></div><div class="row_col_wrap_12 col span_12 dark left">
+	<div  class="vc_col-sm-12 vc_col-xs-1/5 wpb_column column_container vc_column_container col no-extra-padding column_element_direction_desktop_horizontal column_element_direction_phone_horizontal inherit_tablet inherit_phone "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a57c9" data-midnight="" data-column-margin="custom" class="wpb_row vc_row-fluid vc_row inner_row vc_row-o-equal-height vc_row-flex vc_row-o-content-middle max_width_desktop_300px row_position_relative right_padding_0pct column-margin-0px"  style=""><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  right">
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding column_element_direction_phone_horizontal inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="5px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-instagram"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding column_element_direction_phone_horizontal inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="5px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-facebook"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding column_element_direction_phone_horizontal inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="5px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="nectar-brands-tiktok"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-3 wpb_column column_container vc_column_container col child_column no-extra-padding column_element_direction_desktop_horizontal column_element_direction_phone_horizontal inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="nectar_icon_wrap " data-style="default" data-padding="5px" data-color="white" style="" >
+		<div class="nectar_icon" ><i style="font-size: 25px; line-height: 25px; height: 25px; width: 25px;" class="fa fa-linkedin-square"></i></div>
+	</div>
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+</div></div>
+		<div id="fws_6a0a1348a5b5f"  data-column-margin="none" data-midnight="light" data-bottom-percent="2%"  class="wpb_row vc_row-fluid vc_row full-width-content has-row-bg-color vc_row-o-equal-height vc_row-flex vc_row-o-content-top  right_padding_7pct left_padding_7pct"  style="padding-top: 0px; padding-bottom: calc(100vw * 0.02); --row-bg-color: #111111;"><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="true"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop using-bg-color"  style="background-color: #111111; "></div></div><div class="row-bg-overlay row-bg-layer" style="background-color:#111111;  opacity: 0.8; "></div></div><div class="row_col_wrap_12 col span_12 light left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col no-extra-padding inherit_tablet inherit_phone "  data-padding-pos="right" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+			<div class="wpb_wrapper">
+				<div id="fws_6a0a1348a5c41" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row"  style=""><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone flex_gap_desktop_10px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			<div class="divider-wrap" data-alignment="default"><div style="margin-top: 10px; height: 1px; margin-bottom: 10px;" data-width="100%" data-animate="" data-animation-delay="" data-color="default" class="divider-border"></div></div>
+		</div> 
+	</div>
+	</div> 
+</div></div><div id="fws_6a0a1348a5d18" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row"  style=""><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
+	<div  class="vc_col-sm-6 wpb_column column_container vc_column_container col child_column no-extra-padding force-desktop-text-align-left inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<p>© 2026. Heli-Flights. Alle rechten voorbehouden</p>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+
+	<div  class="vc_col-sm-6 wpb_column column_container vc_column_container col child_column no-extra-padding force-desktop-text-align-right inherit_tablet inherit_phone "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
+		<div class="vc_column-inner" >
+		<div class="wpb_wrapper">
+			
+<div class="wpb_text_column wpb_content_element " >
+	<p>Vintage 106 Bv BE0790.660.460</p>
+</div>
+
+
+
+
+		</div> 
+	</div>
+	</div> 
+</div></div>
+			</div> 
+		</div>
+	</div> 
+</div></div></div></section>
+<style type="text/css" data-type="vc_shortcodes-custom-css">.vc_custom_1771512454068{margin-right: 0% !important;border-right-width: 0% !important;padding-right: 0% !important;}</style> </div></div>
+<div id="footer-outer" data-midnight="light" data-cols="4" data-custom-color="false" data-disable-copyright="false" data-matching-section-color="true" data-copyright-line="false" data-using-bg-img="false" data-bg-img-overlay="0.8" data-full-width="false" data-using-widget-area="false" data-link-hover="default"role="contentinfo">
+	
+	
+  <div class="row" id="copyright" data-layout="default">
+
+	<div class="container">
+
+				<div class="col span_5">
+
+			<p>&copy; 2026 Heli-flights. </p>
+		</div><!--/span_5-->
+		
+	  <div class="col span_7 col_last">
+      <ul class="social">
+              </ul>
+	  </div><!--/span_7-->
+
+	  
+	</div><!--/container-->
+  </div><!--/row-->
+		
+</div><!--/footer-outer-->
+
+  <div id="slide-out-widget-area-bg" class="slide-out-from-right dark"></div>
+  <div id="slide-out-widget-area" role="dialog" aria-modal="true" aria-label="Off Canvas Menu" class="slide-out-from-right" data-dropdown-func="default" data-back-txt="Back">
+    <div class="inner-wrap">
+    <div class="inner" data-prepend-menu-mobile="true">
+      <a class="slide_out_area_close" href="#"><span class="screen-reader-text">Close Menu</span><span class="close-wrap"><span class="close-line close-line1"></span><span class="close-line close-line2"></span></span></a>
+      <div class="off-canvas-menu-container" role="navigation">
+        <ul class="menu">
+          <li class="menu-item menu-item-home current-menu-item"><a href="index.html" aria-current="page">Home</a></li>
+          <li class="menu-item menu-item-has-children"><a href="onze-diensten/index.html" aria-haspopup="true" aria-expanded="false">Onze vluchten</a>
+            <ul class="sub-menu">
+              <li class="menu-item"><a href="prive-rondvlucht/index.html">Privé rondvlucht</a></li>
+              <li class="menu-item"><a href="zelf-vliegen/index.html">Zelf vliegen</a></li>
+              <li class="menu-item"><a href="gedeelde-vlucht/index.html">Boek per stoel</a></li>
+              <li class="menu-item"><a href="trouwvlucht/index.html">Trouwvlucht</a></li>
+              <li class="menu-item"><a href="huwelijksaanzoek/index.html">Huwelijksaanzoek</a></li>
+              <li class="menu-item"><a href="contact-b2b/index.html">B2B</a></li>
+            </ul>
+          </li>
+          <li class="menu-item"><a href="over-ons/index.html">Over ons</a></li>
+          <li class="menu-item"><a href="contacteer/index.html">Contact</a></li>
+          <li class="menu-item"><a href="veelgestelde-vragen/index.html">FAQ</a></li>
+        </ul>
       </div>
     </div>
-  </footer>
+    </div>
+  </div>
+  <a id="to-top" aria-label="Back to top" role="button" href="#" class="mobile-disabled"><i role="presentation" class="fa fa-angle-up"></i></a>
+  </div></div><!-- /ocm-effect-wrap -->
+
+  <!-- WordPress JS for header/footer -->
+  <script src="wp-includes/js/jquery/jquery.minf43b.js"></script>
+  <script src="wp-includes/js/jquery/jquery-migrate.min5589.js"></script>
+  <script src="wp-content/themes/salient/js/build/third-party/jquery.easing.min4e44.js"></script>
+  <script src="wp-content/themes/salient/js/build/priorityf411.js"></script>
+  <script src="wp-content/themes/salient/js/build/third-party/transit.mine2dc.js"></script>
+  <script src="wp-content/themes/salient/js/build/third-party/waypoints05da.js"></script>
+  <script src="wp-content/themes/salient/js/build/third-party/hoverintent.min3aa8.js"></script>
+  <script src="wp-content/themes/salient/js/build/third-party/superfish0322.js"></script>
+  <script src="wp-content/themes/salient/js/build/initf411.js"></script>
 
 </body>
 </html>

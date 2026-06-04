@@ -1451,6 +1451,22 @@ h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helveti
 
 
 
+<style id="brand-swiss-grid">
+/* ── Swiss technical grid system — homepage — brandbook-kleuren ── */
+:root{--bx:rgba(64,64,65,.11);--bxf:rgba(64,64,65,.05);--cr:#8e0000}
+/* 12-koloms technisch raster (subtiel, over de hele pagina incl. WebGL) */
+html::before{content:"";position:fixed;top:0;bottom:0;left:max(28px,4.5vw);right:max(28px,4.5vw);z-index:9990;pointer-events:none;
+  background-image:repeating-linear-gradient(90deg,var(--bxf) 0,var(--bxf) 1px,transparent 1px,transparent calc(100%/12))}
+/* technische frame-rand rond de viewport */
+body::before{content:"";position:fixed;inset:14px;z-index:9991;pointer-events:none;border:1px solid var(--bx)}
+/* crimson registratie-tick (linksboven) */
+body::after{content:"";position:fixed;top:14px;left:14px;width:20px;height:20px;z-index:9992;pointer-events:none;
+  border-top:2px solid var(--cr);border-left:2px solid var(--cr)}
+/* sectietitels: technische hairline boven de sectie */
+.svc-title,.trust-headline{border-top:0}
+/* eyebrow-labels strak technisch (HN, uppercase, getrackt) */
+.eyebrow{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.22em!important;font-weight:600;color:var(--cr)}
+</style>
 </head>
 <body>
 
@@ -3016,5 +3032,25 @@ h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helveti
     </div>
   </footer>
 
+<style id="bx-offscreen-menu">
+#bx-menu{position:fixed;inset:0;z-index:10000;background:#f3f3f4;display:flex;flex-direction:column;clip-path:inset(0 0 100% 0);transition:clip-path .6s cubic-bezier(.76,0,.24,1);pointer-events:none}
+#bx-menu.open{clip-path:inset(0 0 0 0);pointer-events:auto}
+#bx-menu::before{content:"";position:absolute;top:0;bottom:0;left:max(28px,4.5vw);right:max(28px,4.5vw);background-image:repeating-linear-gradient(90deg,rgba(64,64,65,.06) 0,rgba(64,64,65,.06) 1px,transparent 1px,transparent calc(100%/12));pointer-events:none}
+.bx-menu-top{display:flex;justify-content:space-between;align-items:center;padding:22px max(28px,4.5vw);border-bottom:1px solid rgba(64,64,65,.13)}
+.bx-menu-brand{font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:#404041}
+.bx-menu-close{appearance:none;border:1px solid rgba(64,64,65,.28);background:none;color:#8e0000;font:600 12px/1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:11px 16px;cursor:pointer;transition:.2s}
+.bx-menu-close:hover{background:#8e0000;color:#fff;border-color:#8e0000}
+.bx-menu-list{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px max(28px,4.5vw)}
+.bx-menu-list a{display:flex;align-items:baseline;gap:clamp(16px,2vw,34px);text-decoration:none;color:#404041;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.01em;line-height:1.04;font-size:clamp(34px,7.2vw,96px);position:relative;width:fit-content;transition:color .25s ease,transform .4s cubic-bezier(.76,0,.24,1),opacity .4s ease;opacity:0;transform:translateY(46px)}
+#bx-menu.open .bx-menu-list a{opacity:1;transform:none}
+.bx-menu-list a .n{font-family:'Helvetica Neue',Helvetica,sans-serif;font-weight:600;font-size:13px;letter-spacing:.1em;color:#8e0000;align-self:flex-start;padding-top:.4em}
+.bx-menu-list a::after{content:"";position:absolute;left:0;right:100%;bottom:.02em;height:3px;background:#8e0000;transition:right .35s cubic-bezier(.76,0,.24,1)}
+.bx-menu-list a:hover{color:#8e0000;transform:translateX(16px)}
+.bx-menu-list a:hover::after{right:-.15em}
+.bx-menu-foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px max(28px,4.5vw);border-top:1px solid rgba(64,64,65,.13);font:600 11px/1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(64,64,65,.55)}
+.bx-menu-foot .cr{color:#8e0000}
+@media (prefers-reduced-motion:reduce){#bx-menu{transition:none}.bx-menu-list a{transition:none;opacity:1;transform:none}}
+</style>
+<script id="bx-offscreen-menu-js">(function(){function init(){try{if(document.getElementById('bx-menu'))return;var src=document.querySelectorAll('.site-nav-links a');var items=[];src.forEach(function(a){items.push({href:a.getAttribute('href'),txt:(a.textContent||'').trim()});});if(!items.length){items=[{href:'index.html',txt:'Home'},{href:'onze-diensten/index.html',txt:'Diensten'},{href:'over-ons/index.html',txt:'Over ons'},{href:'veelgestelde-vragen/index.html',txt:'FAQ'},{href:'contacteer/index.html',txt:'Contacteer'},{href:'contact-b2b/index.html',txt:'B2B'}];}var m=document.createElement('div');m.id='bx-menu';var links=items.map(function(it,i){return '<a href="'+it.href+'"><span class="n">'+('0'+(i+1)).slice(-2)+'</span>'+it.txt+'</a>';}).join('');m.innerHTML='<div class="bx-menu-top"><span class="bx-menu-brand">Heli-Flights</span><button class="bx-menu-close" id="bxMenuClose" aria-label="Sluiten">Sluiten ✕</button></div><nav class="bx-menu-list" aria-label="Hoofdmenu">'+links+'</nav><div class="bx-menu-foot"><span>v2 — Heli-Flights</span><span class="cr">51.32°N · 4.69°O</span><span>Cleared for takeoff</span></div>';document.body.appendChild(m);var as=m.querySelectorAll('.bx-menu-list a');function open(){m.classList.add('open');document.documentElement.style.overflow='hidden';as.forEach(function(a,i){a.style.transitionDelay=(0.12+i*0.06)+'s';});}function close(){m.classList.remove('open');document.documentElement.style.overflow='';as.forEach(function(a){a.style.transitionDelay='0s';});}document.getElementById('bxMenuClose').addEventListener('click',close);as.forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});var t=document.getElementById('navToggle');if(t){var c=t.cloneNode(true);t.parentNode.replaceChild(c,t);c.style.display='inline-flex';c.addEventListener('click',function(e){e.preventDefault();m.classList.contains('open')?close():open();});}var ll=document.getElementById('navLinks');if(ll)ll.style.display='none';}catch(e){}}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
 </body>
 </html>

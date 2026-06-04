@@ -1425,11 +1425,16 @@
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Black.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
-/* Brandguidelines: hele homepage in Helvetica Neue. Quote + Google reviews houden hun eigen font. WebGL ongemoeid. */
+/* Brandguidelines — font: hele homepage Helvetica Neue */
 :root{--display:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--body:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--sans:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--serif:'Helvetica Neue',Helvetica,Arial,sans-serif!important}
-.quote-block,.quote-text,.quote-mark,.quote-attr,.review-card,.review-text,.review-name{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif}
+/* Brandguidelines — kleuren: charcoal tekst, aviation white achtergrond, crimson accent (al #8e0000) */
+:root{--ink:#404041!important;--bg:#f3f3f4!important;--bg-pure:#f3f3f4!important;--accent-2:#f3f3f4!important}
+/* Quote + Google reviews: eigen font én kleur behouden, WebGL ongemoeid */
+.quote-block,.quote-text,.quote-mark,.quote-attr,.review-card,.review-text,.review-name{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif;--ink:#0a0a0b}
+.review-card,.review-text,.review-name{--bg:#ffffff}
 .quote-block,.quote-text,.quote-mark,.quote-attr{font-family:var(--serif)!important}
 </style>
+
 
 </head>
 <body>

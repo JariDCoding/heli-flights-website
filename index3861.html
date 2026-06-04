@@ -11,19 +11,28 @@
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Black.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue Condensed';src:url('/fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
-/* Brandbook FONT: hele homepage Helvetica Neue */
+/* Brandbook FONT */
 :root{--display:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--body:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--sans:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--serif:'Helvetica Neue',Helvetica,Arial,sans-serif!important}
-/* Brandbook KLEUREN: charcoal tekst, aviation white bg, crimson accent (al #8e0000) */
+/* Brandbook KLEUREN */
 :root{--ink:#404041!important;--bg:#f3f3f4!important;--bg-pure:#f3f3f4!important;--accent-2:#f3f3f4!important}
-/* Brandbook TYPOGRAFIE: titels = Helvetica Neue Condensed Black, UPPERCASE, tracking +25, line-height 1.2 */
+/* Brandbook TYPOGRAFIE: titels = Condensed Black UPPERCASE +25 tracking lh1.2 */
 h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.025em!important;line-height:1.2!important}
-/* Brandbook crimson RULE-motief onder de sectietitels */
 .svc-title::after,.trust-headline::after{content:"";display:block;width:48px;height:3px;margin-top:14px;background:#8e0000}
-/* Quote + Google reviews: eigen font én kleur behouden, WebGL ongemoeid */
+/* Brandbook NAVIGATIE-MENU */
+.site-nav-brand{font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif!important;font-weight:900!important;letter-spacing:.05em;text-transform:uppercase}
+.site-nav-links a{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.09em;font-weight:600;position:relative}
+.site-nav-links a:not(.site-nav-b2b):hover{color:#8e0000}
+.site-nav-links a:not(.site-nav-b2b)::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:#8e0000;transition:width .22s ease}
+.site-nav-links a:not(.site-nav-b2b):hover::after{width:100%}
+.site-nav-b2b{background:#8e0000!important;color:#fff!important;padding:8px 16px!important;letter-spacing:.08em;border:none!important}
+.site-nav-b2b:hover{background:#6f0000!important}
+.site-nav-toggle span{background:#8e0000}
+/* Quote + Google reviews ongemoeid; WebGL onaangeraakt */
 .quote-block,.quote-text,.quote-mark,.quote-attr,.review-card,.review-text,.review-name{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif;--ink:#0a0a0b}
 .review-card,.review-text,.review-name{--bg:#ffffff}
 .quote-block,.quote-text,.quote-mark,.quote-attr{font-family:var(--serif)!important;text-transform:none!important}
 </style>
+
 </head>
 <BODY>
 <A HREF="initiatievlucht-aanvraag/index.html"><h3>Click here...</h3></A>

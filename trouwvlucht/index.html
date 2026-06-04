@@ -807,19 +807,28 @@ var wcpayAssets = {"url":"https://heli-flights.be/wp-content/plugins/woocommerce
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Black.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Helvetica Neue Condensed';src:url('/fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
-/* Brandbook FONT: hele homepage Helvetica Neue */
+/* Brandbook FONT */
 :root{--display:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--body:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--sans:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--serif:'Helvetica Neue',Helvetica,Arial,sans-serif!important}
-/* Brandbook KLEUREN: charcoal tekst, aviation white bg, crimson accent (al #8e0000) */
+/* Brandbook KLEUREN */
 :root{--ink:#404041!important;--bg:#f3f3f4!important;--bg-pure:#f3f3f4!important;--accent-2:#f3f3f4!important}
-/* Brandbook TYPOGRAFIE: titels = Helvetica Neue Condensed Black, UPPERCASE, tracking +25, line-height 1.2 */
+/* Brandbook TYPOGRAFIE: titels = Condensed Black UPPERCASE +25 tracking lh1.2 */
 h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.025em!important;line-height:1.2!important}
-/* Brandbook crimson RULE-motief onder de sectietitels */
 .svc-title::after,.trust-headline::after{content:"";display:block;width:48px;height:3px;margin-top:14px;background:#8e0000}
-/* Quote + Google reviews: eigen font én kleur behouden, WebGL ongemoeid */
+/* Brandbook NAVIGATIE-MENU */
+.site-nav-brand{font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif!important;font-weight:900!important;letter-spacing:.05em;text-transform:uppercase}
+.site-nav-links a{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.09em;font-weight:600;position:relative}
+.site-nav-links a:not(.site-nav-b2b):hover{color:#8e0000}
+.site-nav-links a:not(.site-nav-b2b)::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:#8e0000;transition:width .22s ease}
+.site-nav-links a:not(.site-nav-b2b):hover::after{width:100%}
+.site-nav-b2b{background:#8e0000!important;color:#fff!important;padding:8px 16px!important;letter-spacing:.08em;border:none!important}
+.site-nav-b2b:hover{background:#6f0000!important}
+.site-nav-toggle span{background:#8e0000}
+/* Quote + Google reviews ongemoeid; WebGL onaangeraakt */
 .quote-block,.quote-text,.quote-mark,.quote-attr,.review-card,.review-text,.review-name{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif;--ink:#0a0a0b}
 .review-card,.review-text,.review-name{--bg:#ffffff}
 .quote-block,.quote-text,.quote-mark,.quote-attr{font-family:var(--serif)!important;text-transform:none!important}
 </style>
+
 </head><body class="wp-singular page-template-default page page-id-203 wp-theme-salient theme-salient woocommerce-no-js material wpb-js-composer js-comp-ver-8.6.1 vc_responsive" data-footer-reveal="false" data-footer-reveal-shadow="none" data-header-format="centered-menu" data-body-border="off" data-boxed-style="" data-header-breakpoint="1000" data-dropdown-style="minimal" data-cae="easeOutCubic" data-cad="750" data-megamenu-width="full-width" data-aie="fade-in" data-ls="fancybox" data-apte="standard" data-hhun="0" data-fancy-form-rcs="default" data-form-style="default" data-form-submit="regular" data-is="minimal" data-button-style="rounded_shadow" data-user-account-button="false" data-flex-cols="true" data-col-gap="default" data-header-inherit-rc="false" data-header-search="false" data-animated-anchors="true" data-ajax-transitions="false" data-full-width-header="true" data-slide-out-widget-area="true" data-slide-out-widget-area-style="slide-out-from-right" data-user-set-ocm="1" data-loading-animation="none" data-bg-header="false" data-responsive="1" data-ext-responsive="true" data-ext-padding="90" data-header-resize="1" data-header-color="custom" data-cart="true" data-remove-m-parallax="" data-remove-m-video-bgs="" data-m-animate="0" data-force-header-trans-color="light" data-smooth-scrolling="0" data-permanent-transparent="false" >
 	
 	<script type="text/javascript">

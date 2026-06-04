@@ -1474,16 +1474,38 @@ section+section{border-top:1px solid var(--bx)}
 </style>
 
 <style id="bx-loader">
-#loader{background:#f3f3f4!important}
-#loader .loader-top,#loader .loader-bottom,#loader .loader-num-wrap{display:none!important}
-#loader .loader-middle{flex:1;display:flex;align-items:center;justify-content:center}
-.bx-loader-heli{width:min(168px,28vw);height:auto;overflow:visible;filter:drop-shadow(0 18px 40px rgba(142,0,0,.18))}
-.bx-loader-heli .bx-body{fill:#8e0000}
-.bx-loader-heli .bx-rotor path{fill:#8e0000}
-.bx-loader-heli .bx-rotor{transform-box:fill-box;transform-origin:center;animation:bx-rotor .5s linear infinite}
+#loader{background:#f3f3f4!important;padding:2.25rem max(28px,4.5vw) 2rem!important}
+#loader .loader-top{display:flex!important;justify-content:space-between;align-items:flex-start}
+#loader .loader-brand{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#404041;display:flex;align-items:center;gap:9px;font-weight:500}
+#loader .loader-dot{width:7px;height:7px;background:#8e0000;border-radius:0!important;display:inline-block}
+#loader .loader-meta{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(64,64,65,.5)}
+/* midden: heli CENTRAAL als focus + quote eronder; % staat rechts (absoluut) */
+#loader .loader-middle{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,3vw,34px)}
+.bx-loader-heli{width:clamp(80px,10vw,132px);height:auto;overflow:visible;flex-shrink:0;filter:drop-shadow(0 16px 40px rgba(142,0,0,.16))}
+.bx-loader-heli .bx-body,.bx-loader-heli .bx-rotor path{fill:#8e0000}
+.bx-loader-heli .bx-rotor{transform-box:fill-box;transform-origin:center;animation:bx-rotor 1.5s linear infinite}
 @keyframes bx-rotor{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.bx-loader-heli .bx-rotor{animation-duration:2.4s}}
-</style></head>
+@media(prefers-reduced-motion:reduce){.bx-loader-heli .bx-rotor{animation-duration:3s}}
+/* roterende quote — overtuigt + houdt cognitief bezig */
+.bx-quote{position:relative;max-width:min(560px,74vw);text-align:center;margin:0;font-family:'Helvetica Neue','Helvetica Neue Roman',Helvetica,Arial,sans-serif;font-weight:400;font-size:clamp(15px,1.6vw,20px);line-height:1.45;color:#404041;min-height:2.9em;letter-spacing:.004em;transition:opacity .42s ease}
+.bx-quote .bx-quote-mark{color:#8e0000;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;font-weight:900;font-size:1.5em;line-height:0;margin-right:.14em;vertical-align:-.22em}
+/* percentage RECHTS, groot, verticaal gecentreerd tegen de rechtermarge */
+#loader .loader-num-wrap{position:absolute;right:max(28px,4.5vw);top:50%;transform:translateY(-50%);display:flex!important;align-items:flex-start;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;color:#404041}
+#loader .loader-num{font-weight:900;font-size:clamp(54px,10vw,148px);line-height:.82;letter-spacing:.01em}
+#loader .loader-pct-sign{font-family:'JetBrains Mono',ui-monospace,monospace;color:#8e0000;font-size:18px;margin-left:7px;padding-top:.6em}
+/* onder: status + teller in mono + crimson progress-lijn */
+#loader .loader-bottom{display:block!important}
+#loader .loader-row{display:flex!important;justify-content:space-between;margin-bottom:10px}
+#loader .loader-status,#loader .loader-count{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(64,64,65,.6)}
+#loader .loader-line{height:2px;background:rgba(64,64,65,.13)}
+#loader #loaderBar{background:#8e0000}
+/* heli-Home-knop linksboven = klein accent */
+.site-nav-brand{display:inline-flex;align-items:center;gap:9px}
+.bx-nav-heli{width:18px;height:24px;overflow:visible;flex-shrink:0;transition:transform .3s ease}
+.bx-nav-heli path{fill:#8e0000}
+.site-nav-brand:hover .bx-nav-heli{transform:rotate(10deg)}
+</style>
+</head>
 <body>
 
   <!-- Loading screen — stays until env.hdr, r44_photoreal.glb and fonts are ready -->
@@ -3068,5 +3090,34 @@ section+section{border-top:1px solid var(--bx)}
 @media (prefers-reduced-motion:reduce){#bx-menu{transition:none}.bx-menu-list a{transition:none;opacity:1;transform:none}}
 </style>
 <script id="bx-offscreen-menu-js">(function(){function init(){try{if(document.getElementById('bx-menu'))return;var src=document.querySelectorAll('.site-nav-links a');var items=[];src.forEach(function(a){items.push({href:a.getAttribute('href'),txt:(a.textContent||'').trim()});});if(!items.length){items=[{href:'index.html',txt:'Home'},{href:'onze-diensten/index.html',txt:'Diensten'},{href:'over-ons/index.html',txt:'Over ons'},{href:'veelgestelde-vragen/index.html',txt:'FAQ'},{href:'contacteer/index.html',txt:'Contacteer'},{href:'contact-b2b/index.html',txt:'B2B'}];}var m=document.createElement('div');m.id='bx-menu';var links=items.map(function(it,i){return '<a href="'+it.href+'"><span class="n">'+('0'+(i+1)).slice(-2)+'</span>'+it.txt+'</a>';}).join('');m.innerHTML='<div class="bx-menu-top"><span class="bx-menu-brand">Heli-Flights</span><button class="bx-menu-close" id="bxMenuClose" aria-label="Sluiten">Sluiten ✕</button></div><nav class="bx-menu-list" aria-label="Hoofdmenu">'+links+'</nav><div class="bx-menu-foot"><span>v2 — Heli-Flights</span><span class="cr">51.32°N · 4.69°O</span><span>Cleared for takeoff</span></div>';document.body.appendChild(m);var as=m.querySelectorAll('.bx-menu-list a');function open(){m.classList.add('open');document.documentElement.style.overflow='hidden';as.forEach(function(a,i){a.style.transitionDelay=(0.12+i*0.06)+'s';});}function close(){m.classList.remove('open');document.documentElement.style.overflow='';as.forEach(function(a){a.style.transitionDelay='0s';});}document.getElementById('bxMenuClose').addEventListener('click',close);as.forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});var t=document.getElementById('navToggle');if(t){var c=t.cloneNode(true);t.parentNode.replaceChild(c,t);c.style.display='inline-flex';c.addEventListener('click',function(e){e.preventDefault();m.classList.contains('open')?close():open();});}var ll=document.getElementById('navLinks');if(ll)ll.style.display='none';}catch(e){}}if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);})();</script>
+<script id="bx-loader-quotes">(function(){
+var Q=[
+"Het mooiste uitzicht van België begint op 300 meter hoogte.",
+"Eén vlucht verandert voorgoed hoe je naar de wereld kijkt.",
+"Geen files. Geen grenzen. Enkel de horizon.",
+"Privé, exclusief en volledig op jouw maat — van start tot landing.",
+"De stilte boven de wolken hoor je nergens anders.",
+"Vraag het aan wie al vloog: woorden schieten tekort."
+];
+function init(){
+ var mid=document.querySelector("#loader .loader-middle");if(!mid)return;
+ if(mid.querySelector(".bx-quote"))return;
+ var q=document.createElement("p");q.className="bx-quote";
+ var mk=document.createElement("span");mk.className="bx-quote-mark";mk.textContent="“";
+ var tx=document.createElement("span");tx.className="bx-quote-text";tx.textContent=Q[0];
+ q.appendChild(mk);q.appendChild(tx);mid.appendChild(q);
+ var i=0;
+ var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+ var iv=setInterval(function(){
+   var l=document.getElementById("loader");
+   if(!l||l.offsetParent===null||getComputedStyle(l).opacity==="0"){clearInterval(iv);return;}
+   i=(i+1)%Q.length;
+   if(reduce){tx.textContent=Q[i];return;}
+   q.style.opacity="0";
+   setTimeout(function(){tx.textContent=Q[i];q.style.opacity="1";},420);
+ },3200);
+}
+if(document.readyState!=="loading")init();else document.addEventListener("DOMContentLoaded",init);
+})();</script>
 </body>
 </html>

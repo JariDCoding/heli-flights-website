@@ -1420,6 +1420,15 @@
     .site-footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   }
 </style>
+<style id="brand-helvetica-neue">
+@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Roman.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Black.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+/* Brandguidelines: hele homepage in Helvetica Neue. Quote + Google reviews houden hun eigen font. WebGL ongemoeid. */
+:root{--display:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--body:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--sans:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--serif:'Helvetica Neue',Helvetica,Arial,sans-serif!important}
+.quote-block,.quote-text,.quote-mark,.quote-attr,.review-card{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif}
+</style>
 </head>
 <body>
 

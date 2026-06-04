@@ -1474,37 +1474,39 @@ section+section{border-top:1px solid var(--bx)}
 </style>
 
 <style id="bx-loader">
+:root{--bxnav:46px}
 #loader{background:#f3f3f4!important;padding:2.25rem max(28px,4.5vw) 2rem!important}
 #loader .loader-top{display:flex!important;justify-content:space-between;align-items:flex-start}
 #loader .loader-brand{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#404041;display:flex;align-items:center;gap:9px;font-weight:500}
 #loader .loader-dot{width:7px;height:7px;background:#8e0000;border-radius:0!important;display:inline-block}
 #loader .loader-meta{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(64,64,65,.5)}
-/* midden: heli CENTRAAL als focus + quote eronder; % staat rechts (absoluut) */
+/* midden: lockup [kleine heli-accent links + % rechts] gecentreerd, quote eronder */
 #loader .loader-middle{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,3vw,34px)}
-.bx-loader-heli{width:clamp(80px,10vw,132px);height:auto;overflow:visible;flex-shrink:0;filter:drop-shadow(0 16px 40px rgba(142,0,0,.16))}
+.bx-lockup{display:flex;align-items:center;justify-content:center;gap:clamp(12px,1.5vw,26px)}
+.bx-loader-heli{width:clamp(40px,4.2vw,62px);height:auto;overflow:visible;flex-shrink:0;filter:drop-shadow(0 10px 26px rgba(142,0,0,.15))}
 .bx-loader-heli .bx-body,.bx-loader-heli .bx-rotor path{fill:#8e0000}
-.bx-loader-heli .bx-rotor{transform-box:fill-box;transform-origin:center;animation:bx-rotor 1.5s linear infinite}
+.bx-loader-heli .bx-rotor{transform-box:fill-box;transform-origin:center;animation:bx-rotor 1.6s linear infinite}
 @keyframes bx-rotor{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.bx-loader-heli .bx-rotor{animation-duration:3s}}
-/* roterende quote — overtuigt + houdt cognitief bezig */
+@media(prefers-reduced-motion:reduce){.bx-loader-heli .bx-rotor{animation-duration:3.2s}}
+#loader .loader-num-wrap{position:static!important;transform:none!important;display:flex!important;align-items:flex-start;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;color:#404041}
+#loader .loader-num{font-weight:900;font-size:clamp(46px,7vw,104px);line-height:.82;letter-spacing:.01em}
+#loader .loader-pct-sign{font-family:'JetBrains Mono',ui-monospace,monospace;color:#8e0000;font-size:15px;margin-left:6px;padding-top:.5em}
+/* roterende quote (overtuigt + cognitief boeiend) */
 .bx-quote{position:relative;max-width:min(560px,74vw);text-align:center;margin:0;font-family:'Helvetica Neue','Helvetica Neue Roman',Helvetica,Arial,sans-serif;font-weight:400;font-size:clamp(15px,1.6vw,20px);line-height:1.45;color:#404041;min-height:2.9em;letter-spacing:.004em;transition:opacity .42s ease}
 .bx-quote .bx-quote-mark{color:#8e0000;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;font-weight:900;font-size:1.5em;line-height:0;margin-right:.14em;vertical-align:-.22em}
-/* percentage RECHTS, groot, verticaal gecentreerd tegen de rechtermarge */
-#loader .loader-num-wrap{position:absolute;right:max(28px,4.5vw);top:50%;transform:translateY(-50%);display:flex!important;align-items:flex-start;font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif;color:#404041}
-#loader .loader-num{font-weight:900;font-size:clamp(54px,10vw,148px);line-height:.82;letter-spacing:.01em}
-#loader .loader-pct-sign{font-family:'JetBrains Mono',ui-monospace,monospace;color:#8e0000;font-size:18px;margin-left:7px;padding-top:.6em}
-/* onder: status + teller in mono + crimson progress-lijn */
+/* onder */
 #loader .loader-bottom{display:block!important}
 #loader .loader-row{display:flex!important;justify-content:space-between;margin-bottom:10px}
 #loader .loader-status,#loader .loader-count{font-family:'JetBrains Mono',ui-monospace,monospace!important;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(64,64,65,.6)}
 #loader .loader-line{height:2px;background:rgba(64,64,65,.13)}
 #loader #loaderBar{background:#8e0000}
-/* heli-Home-knop linksboven = klein accent */
-.site-nav-brand{display:inline-flex;align-items:center;gap:9px}
-.bx-nav-heli{width:18px;height:24px;overflow:visible;flex-shrink:0;transition:transform .3s ease}
+/* HOME-knop linksboven: ENKEL heli, groter, brand-clearspace = 0.5x logobreedte */
+.site-nav-brand{display:inline-flex!important;align-items:center;gap:0!important;font-size:0!important;line-height:0!important;padding:calc(var(--bxnav)*.5)!important}
+.bx-nav-heli{width:var(--bxnav);height:auto;overflow:visible;flex-shrink:0;display:block;transition:transform .3s ease}
 .bx-nav-heli path{fill:#8e0000}
-.site-nav-brand:hover .bx-nav-heli{transform:rotate(10deg)}
+.site-nav-brand:hover .bx-nav-heli{transform:rotate(8deg)}
 </style>
+
 </head>
 <body>
 
@@ -3101,13 +3103,17 @@ var Q=[
 ];
 function init(){
  var mid=document.querySelector("#loader .loader-middle");if(!mid)return;
+ var heli=mid.querySelector(".bx-loader-heli"), num=mid.querySelector(".loader-num-wrap");
+ if(heli&&num&&!mid.querySelector(".bx-lockup")){
+   var lock=document.createElement("div");lock.className="bx-lockup";
+   mid.insertBefore(lock,heli);lock.appendChild(heli);lock.appendChild(num);
+ }
  if(mid.querySelector(".bx-quote"))return;
  var q=document.createElement("p");q.className="bx-quote";
  var mk=document.createElement("span");mk.className="bx-quote-mark";mk.textContent="“";
  var tx=document.createElement("span");tx.className="bx-quote-text";tx.textContent=Q[0];
  q.appendChild(mk);q.appendChild(tx);mid.appendChild(q);
- var i=0;
- var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+ var i=0, reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
  var iv=setInterval(function(){
    var l=document.getElementById("loader");
    if(!l||l.offsetParent===null||getComputedStyle(l).opacity==="0"){clearInterval(iv);return;}
@@ -3119,5 +3125,6 @@ function init(){
 }
 if(document.readyState!=="loading")init();else document.addEventListener("DOMContentLoaded",init);
 })();</script>
+
 </body>
 </html>

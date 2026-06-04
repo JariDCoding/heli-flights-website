@@ -1518,6 +1518,20 @@ section+section{border-top:1px solid var(--bx)}
 .svc-tag{color:#8e0000!important;border:1px solid rgba(142,0,0,.32)!important;border-radius:0!important}
 /* svc-desc: in lijn met .flights .body — charcoal, niet cursief, zelfde gewicht */
 .svc-desc{font-family:var(--display)!important;color:var(--ink)!important;font-style:normal!important;font-weight:500!important}
+
+/* dienst-naam: expliciet Helvetica Neue + charcoal i.p.v. full black */
+.svc-row-name{font-family:'Helvetica Neue','Helvetica Neue Roman',Helvetica,Arial,sans-serif!important}
+.svc-row.active .svc-row-name{color:#404041!important}
+</style><style id="brand-menu-toggle">
+:root{--navH:54px}
+/* logo links: hoogte-gelockt op het grid (clearspace = 0.5x breedte) */
+.bx-nav-heli{height:var(--navH)!important;width:auto!important}
+.site-nav-brand{padding:calc(var(--navH)*.389)!important}
+/* MENU + hamburger rechts — zelfde hoogte als het logo */
+.site-nav-toggle{display:inline-flex!important;flex-direction:row!important;align-items:center!important;gap:calc(var(--navH)*.34)!important;padding:calc(var(--navH)*.389)!important;background:none!important;border:0!important;width:auto!important;height:auto!important;cursor:pointer}
+.site-nav-toggle .bx-menu-word{font-family:'Helvetica Neue Condensed','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.02em!important;font-size:calc(var(--navH)*1.34)!important;line-height:.74!important;color:#404041!important;display:inline-block!important;width:auto!important;height:auto!important;background:none!important;margin:0!important;border:0!important;transform:none!important}
+.site-nav-toggle .bx-burger{display:inline-flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:calc(var(--navH)*.11)!important;width:calc(var(--navH)*.6)!important;height:var(--navH)!important;background:none!important;border:0!important}
+.site-nav-toggle .bx-burger span{display:block!important;width:100%!important;height:3px!important;background:#8e0000!important;border-radius:0!important;margin:0!important;padding:0!important;transform:none!important;position:static!important;opacity:1!important;transition:none!important}
 </style></head>
 <body>
 
@@ -1560,9 +1574,7 @@ section+section{border-top:1px solid var(--bx)}
   <!-- Navigation -->
   <nav class="site-nav" id="siteNav" role="navigation" aria-label="Hoofdnavigatie">
     <a href="index.html" class="site-nav-brand">HELI-FLIGHTS</a>
-    <button class="site-nav-toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="site-nav-toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false"><span class="bx-menu-word">Menu</span><span class="bx-burger"><span></span><span></span><span></span></span></button>
     <ul class="site-nav-links" id="navLinks" role="list">
       <li><a href="index.html">Home</a></li>
       <li><a href="onze-diensten/index.html">Diensten</a></li>
@@ -1662,7 +1674,7 @@ section+section{border-top:1px solid var(--bx)}
     <section class="hero">
       <div class="wrap">
         <div class="copy">
-          <h1 class="fade-up d2">HELI<img class="dash" src="subtract.svg" alt=""><br>FLIGHTS</h1>
+          <h1 class="fade-up d2">Heli<img class="dash" src="subtract.svg" alt=""><br>Flights</h1>
           <p class="body fade-up d3">Uw avontuur start hier, plan uw helikoptervlucht<br>binnen 1 minuut.</p>
           <div class="btn-row fade-up d5">
             <a href="prive-rondvlucht-aanvraag/index.html" class="btn btn-primary">Start een aanvraag</a>

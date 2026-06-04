@@ -2553,7 +2553,7 @@ h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helveti
     const swayAmp  = inSvcHover ? 0.07 : 0.0;
     const windGustY = inSvcHover ? Math.sin(t * 2.3) * Math.sin(t * 0.37) * 0.035 : 0;
     const windGustX = inSvcHover ? Math.sin(t * 1.8) * Math.sin(t * 0.29) * 0.04 : 0;
-    const yWithBob = target.y + Math.sin(t * 0.85) * bobAmp + (inSvcHover ? Math.sin(t * 1.7) * 0.025 : 0) + windGustY;
+    const _heroLift=(window.innerWidth>=2000)?0.55*Math.max(0,1-(window.scrollY/360)):0; const yWithBob = target.y + _heroLift + Math.sin(t * 0.85) * bobAmp + (inSvcHover ? Math.sin(t * 1.7) * 0.025 : 0) + windGustY;
     const xWithBob = target.x + Math.sin(t * 0.45) * swayAmp + (inSvcHover ? Math.cos(t * 0.6) * 0.03 : 0) + windGustX;
 
     // Wind-driven rotation oscillation during SVC hover

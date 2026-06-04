@@ -1507,7 +1507,18 @@ section+section{border-top:1px solid var(--bx)}
 .site-nav-brand:hover .bx-nav-heli{transform:rotate(8deg)}
 </style>
 
-</head>
+<style id="brand-svc-align">
+/* Diensten-knoppen gelijk aan hero/flights: body-font, flat (geen pill), brand-crimson */
+.svc-btn-pri,.svc-btn-sec{font-family:var(--body)!important;font-size:15px!important;font-weight:600!important;letter-spacing:.005em!important;text-transform:none!important;border-radius:0!important;padding:16px 34px!important;transition:background .3s,border-color .3s,color .3s,transform .25s!important}
+.svc-btn-pri{background:#8e0000!important;color:#fff!important;border:1px solid #8e0000!important}
+.svc-btn-pri:hover{background:#6b0000!important;border-color:#6b0000!important;transform:translateY(-2px)}
+.svc-btn-sec{background:transparent!important;color:#404041!important;border:1px solid rgba(64,64,65,.4)!important}
+.svc-btn-sec:hover{border-color:#404041!important;transform:translateY(-2px)}
+/* svc-tag: brand-crimson + flat (geen ronde hoeken), zoals de eyebrow-labels */
+.svc-tag{color:#8e0000!important;border:1px solid rgba(142,0,0,.32)!important;border-radius:0!important}
+/* svc-desc: in lijn met .flights .body — charcoal, niet cursief, zelfde gewicht */
+.svc-desc{font-family:var(--display)!important;color:var(--ink)!important;font-style:normal!important;font-weight:500!important}
+</style></head>
 <body>
 
   <!-- Loading screen — stays until env.hdr, r44_photoreal.glb and fonts are ready -->
@@ -1671,7 +1682,7 @@ section+section{border-top:1px solid var(--bx)}
           <h2>Helikoptervluchten<br><span class="nowrap">door <em>heel België</em></span></h2>
           <p class="body">Heli-Flights verzorgt al jaren helikoptervluchten door heel België, van fotorondvluchten en trouwvluchten tot privé charters en transfers naar Spa en beyond.</p>
           <div class="btn-row">
-            <a href="#" class="btn btn-primary">Ontdek de routes →</a>
+            <a href="over-ons/index.html" class="btn btn-primary">Meer over ons →</a>
           </div>
         </div>
       </div>

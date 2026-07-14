@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Huwelijksaanzoek — Aanvraag · Heli-Flights</title>
+<title>Cadeaubon Luchtdoop — Bestellen · Heli-Flights</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
@@ -78,41 +78,20 @@
   .field label{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
   .field input{width:100%; padding:15px 16px; font-family:inherit; font-size:17px; color:var(--ink);
     background:var(--white); border:1.5px solid var(--line-2); border-radius:3px;}
-  .field input::placeholder{color:#b3b1b2;}
-  .field input:focus{outline:none; border-color:var(--red);}
+  .field textarea{width:100%; padding:15px 16px; font-family:inherit; font-size:17px; color:var(--ink);
+    background:var(--white); border:1.5px solid var(--line-2); border-radius:3px; resize:vertical; min-height:120px; line-height:1.5;}
+  .field input::placeholder,.field textarea::placeholder{color:#b3b1b2;}
+  .field input:focus,.field textarea:focus{outline:none; border-color:var(--red);}
   .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   @media(max-width:560px){ .form-grid{grid-template-columns:1fr;} }
 
-  /* Calendly-style calendar */
-  .cal{background:var(--white); border:1.5px solid var(--line); border-radius:4px; padding:18px; max-width:390px; margin-top:26px;}
-  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
-  .cal-title{font-weight:800; font-size:16px; letter-spacing:.01em; text-transform:capitalize;}
-  .cal-nav{width:36px;height:36px;border:1.5px solid var(--line-2); background:var(--white); border-radius:3px; cursor:pointer; font-size:18px; color:var(--ink); line-height:1;}
-  .cal-nav:hover:not(:disabled){border-color:var(--red); color:var(--red);}
-  .cal-nav:disabled{opacity:.3; cursor:not-allowed;}
-  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
-  .cal-dow{margin-bottom:8px;}
-  .cal-dowc{text-align:center; font-size:11px; font-weight:800; letter-spacing:.04em; color:var(--muted); text-transform:uppercase;}
-  .cal-day{aspect-ratio:1; border:1.5px solid transparent; background:var(--white); border-radius:3px; cursor:pointer;
-    font-family:inherit; font-size:15px; font-weight:600; color:var(--ink); display:flex; align-items:center; justify-content:center;}
-  .cal-day:hover:not(:disabled){border-color:var(--red); color:var(--red);}
-  .cal-day:disabled{color:#d2d2d3; cursor:not-allowed;}
-  .cal-day.sel{background:var(--red); color:#fff; border-color:var(--red);}
-  .cal-empty{aspect-ratio:1;}
-
-  .suggest-label{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:26px; margin-bottom:12px;}
-  .date-suggest{display:flex; gap:10px; flex-wrap:wrap;}
-  .dsug{padding:11px 15px; border:1.5px solid var(--line-2); background:var(--white); border-radius:3px; cursor:pointer; font-family:inherit; text-align:left; line-height:1.25; color:var(--ink);}
-  .dsug small{display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);}
-  .dsug b{font-size:15px; font-weight:700;}
-  .dsug[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
-  .dsug[aria-pressed="true"] small{color:var(--red);}
-  .suggest-note{font-size:12.5px; color:var(--muted); margin-top:12px;}
-  .cal-or{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:24px;}
-  .toggle-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
-  .chip{padding:11px 16px; border:1.5px solid var(--line-2); background:var(--white); border-radius:999px;
-    font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; color:var(--ink);}
-  .chip[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
+  /* prijs-highlight */
+  .price-hi{display:flex; align-items:baseline; gap:14px; margin-top:26px;
+    background:var(--white); border:1.5px solid var(--line); border-left:3px solid var(--red);
+    border-radius:3px; padding:20px 24px;}
+  .price-hi .k{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .price-hi .v{font-size:38px; font-weight:800; letter-spacing:-.01em; color:var(--ink); line-height:1; margin-left:auto;}
+  .price-hi .s{font-size:13px; color:var(--muted); font-weight:600;}
 
   .info-box{margin-top:26px; background:var(--white); border:1.5px solid var(--line); border-left:3px solid var(--red); border-radius:3px; padding:22px 24px;}
   .info-box ul{list-style:none; display:grid; gap:12px;}
@@ -145,6 +124,7 @@
     .btn{padding:14px 22px; font-size:15px;}
     .topbar,.footer,.steps{padding-left:18px; padding-right:18px;}
     .stage{padding:24px 18px;}
+    .price-hi .v{font-size:30px;}
   }
 </style>
 
@@ -166,86 +146,37 @@
 
 <script>
 const state = {
-  moment:null, vertrek:null, route:null, duur:null, datum:'', flexibel:false,
-  extras:[], voornaam:'', achternaam:'', email:'', tel:''
+  bontype:null, ontv_naam:'', adres:'', postcode:'', gemeente:'',
+  boodschap:'', voor_wie:'', voornaam:'', achternaam:'', email:'', tel:''
 };
 
-// ── Waar de aanvraag naartoe gaat. Vul in met je CRM-webhook of Zapier catch-hook.
-//    Leeg = de aanvraag wordt in de console gelogd (voor testen).
+// ── Waar de bestelling naartoe gaat. Vul in met je CRM-webhook of Zapier catch-hook.
+//    Leeg = de bestelling wordt in de console gelogd (voor testen).
 const SUBMIT_ENDPOINT = ''; // bv. 'https://crm.heli-flights.be/api/leads'
-
-const routeSets = {
-  antwerpen:[
-    {v:'skyline', b:'Skyline & Schelde', s:'Het Steen · kathedraal · MAS · Havenhuis'},
-    {v:'haven', b:'Haven & Forten', s:'De haven · de dokken · de fortengordel'},
-  ],
-  kust:[
-    {v:'kustlijn', b:'Kustlijn Knokke–Oostende', s:'Zwin · Knokke · Blankenberge · Zeebrugge'},
-    {v:'brugge', b:'Brugge & Zwin', s:'Historisch Brugge · het Zwin · de duinen'},
-  ],
-  eigen:[]
-};
 
 function buildSteps(){
   const s = [];
-  s.push({id:'moment', type:'single', label:'Moment', q:'Waar stel je de grote <span class="imp">vraag</span>?',
-    help:'Kies het moment dat bij jullie past. We stemmen alles vooraf discreet af.',
+  s.push({id:'bontype', type:'single', label:'Bon', q:'Digitaal of <span class="imp">fysiek</span>?',
+    help:'Een luchtdoop cadeau: een gedeelde helikoptervlucht van ± 15 minuten boven Antwerpen.',
     options:[
-      {v:'lucht', b:'In de lucht', s:'Tijdens de vlucht — we spreken het teken vooraf af met de piloot'},
-      {v:'grond', b:'Net na de landing', s:'Op de grond, mooi met een klaarstaand flesje champagne'},
+      {v:'digitaal', b:'Digitale bon — €150', s:'Pdf per e-mail met QR-code, meteen te versturen'},
+      {v:'fysiek', b:'Fysieke bon — €160', s:'Verzorgde bon met QR-code, per post bezorgd (incl. verzending)'},
     ]});
-  s.push({id:'vertrek', type:'single', label:'Vertrek', q:'Vanwaar wil je <span class="imp">vertrekken</span>?',
-    help:'Kies de dichtstbijzijnde basis, of vertrek vanaf je eigen locatie.',
-    options:[
-      {v:'antwerpen', b:'Regio Antwerpen', s:'Ranst · Nijlen · Lier · Ravels'},
-      {v:'kust', b:'Regio Kust', s:'Zeebrugge · Knokke'},
-      {v:'eigen', b:'Eigen locatie', s:'Pickup & dropoff op maat'},
-    ]});
-  if(state.vertrek==='eigen'){
-    s.push({id:'voorwaarden', type:'info', label:'Eigen locatie', q:'Even dit over je <span class="imp">eigen locatie</span>',
-      help:'Vertrek of landing op je eigen terrein kan, als het aan deze voorwaarden voldoet:',
-      items:[
-        'Een vrij terrein van minstens 30 × 15 meter',
-        'Een obstakelvrije aan- en uitvliegroute (geen hoge bomen, kabels of masten)',
-        'Een vaste, egale ondergrond zonder los materiaal',
-        'Schriftelijke toelating van de eigenaar of huurder',
-      ],
-      note:'Goed om te weten: de vliegtijd van en naar je locatie (vanaf onze basis) telt mee in de totale vluchttijd.'});
+  if(state.bontype==='fysiek'){
+    s.push({id:'bezorging', type:'address', label:'Bezorging', q:'Waar mogen we de <span class="imp">bon</span> naartoe sturen?',
+      help:'We sturen de verzorgde cadeaubon per post naar dit adres.'});
   }
-  const rs = state.vertrek ? routeSets[state.vertrek].slice() : [];
-  const routeOpts = rs.concat([
-    {v:'zelf', b:'Ik stippel zelf uit', s:'Over een plek die iets betekent voor jullie'},
-    {v:'advies', b:'Laat ons adviseren', s:'We stellen samen de mooiste route voor'},
-  ]);
-  s.push({id:'route', type:'single', label:'Route', q:'Welke <span class="imp">route</span> wil je vliegen?',
-    help: state.vertrek==='eigen' ? 'Bepaal vrij je route binnen de toegelaten luchtruimtes.' : 'Kies een uitgewerkte klassieker, of stippel je eigen route uit.',
-    options: routeOpts});
-  s.push({id:'duur', type:'single', label:'Duur', q:'Hoe lang wil je <span class="imp">in de lucht</span>?',
-    help:'Elke privévlucht duurt minstens 30 minuten. Een langere, volledig eigen route stippelen we samen uit.',
-    options:[
-      {v:'30', b:'30 minuten', s:'Een intiem moment boven de mooiste plekken'},
-      {v:'45', b:'45 minuten', s:'Wat meer tijd om van het uitzicht te genieten'},
-      {v:'60', b:'60 minuten', s:'Uitgebreid, alle tijd voor het moment'},
-      {v:'langer', b:'Langer / op maat', s:'We bespreken je volledige route (min. 30 min)'},
-    ]});
-  s.push({id:'wanneer', type:'date', label:'Datum', q:'Wanneer wil je <span class="imp">vliegen</span>?',
-    help:'Voor zo\'n moment prikken we bij voorkeur meteen een reservedatum. Liefst 2 weken vooraf.'});
-  s.push({id:'extras', type:'multi', label:'Extra’s', q:'Wil je er iets aan <span class="imp">toevoegen</span>?',
-    help:'Optioneel. Onze troef: we verzorgen dit ook op locatie.',
-    options:[
-      {v:'fotograaf', b:'Fotograaf aan boord', s:'Legt het aanzoek voor altijd vast'},
-      {v:'champagne', b:'Champagne na de vlucht', s:'Een toast op de grond'},
-    ]});
-  s.push({id:'contact', type:'form', label:'Contact', q:'Hoe mogen we je <span class="imp">bereiken</span>?',
-    help:'Meestal is dit een verrassing — we bellen je discreet op om alles af te stemmen.'});
-  s.push({id:'bevestig', type:'summary', label:'Contact', q:'Klaar om <span class="imp">aan te vragen</span>?',
-    help:'Check even je keuzes. Je zit nog nergens aan vast.'});
+  s.push({id:'boodschap', type:'message', optional:true, label:'Boodschap', q:'Een <span class="imp">boodschap</span> erbij?',
+    help:'Optioneel — voeg een persoonlijk woordje toe bij de bon.'});
+  s.push({id:'contact', type:'form', label:'Gegevens', q:'Waar mogen we je <span class="imp">bereiken</span>?',
+    help:'We bellen je op om je bestelling te bevestigen en de bon te bezorgen.'});
+  s.push({id:'overzicht', type:'summary', label:'Overzicht', q:'Klaar om te <span class="imp">bestellen</span>?',
+    help:'Check even je keuzes. We ronden alles telefonisch met je af.'});
   return s;
 }
 
 let steps = buildSteps();
 let i = 0;
-let calMonth, calYear;
 
 const stage = document.getElementById('stage');
 const stepsBar = document.getElementById('stepsBar');
@@ -257,65 +188,6 @@ const hint = document.getElementById('hint');
 const tickSVG = '<svg class="tick" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11.5l4.5 4.5L18 6" stroke="#AD0404" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 function esc(s){return (s||'').replace(/</g,'&lt;');}
-
-const MONTHS=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
-const DOW=['ma','di','wo','do','vr','za','zo'];
-
-// TODO: voorgestelde datums later voeden vanuit de CRM-planning/beschikbaarheid
-function suggestedDates(){
-  const out=[]; const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+1);
-  const dn=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
-  const mn=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-  let guard=0;
-  while(out.length<4 && guard<60){ guard++;
-    const day=d.getDay();
-    if(day===6||day===0){
-      const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      out.push({iso, wd:dn[day], lbl:`${d.getDate()} ${mn[d.getMonth()]}`});
-    }
-    d.setDate(d.getDate()+1);
-  }
-  return out;
-}
-function initCal(){
-  const t=new Date();
-  if(state.datum){ const d=new Date(state.datum+'T00:00'); calYear=d.getFullYear(); calMonth=d.getMonth(); }
-  else { calYear=t.getFullYear(); calMonth=t.getMonth(); }
-}
-function drawCal(){
-  const wrap=document.getElementById('calWrap'); if(!wrap) return;
-  const today=new Date(); today.setHours(0,0,0,0);
-  const first=new Date(calYear,calMonth,1);
-  const start=(first.getDay()+6)%7;           // Monday-first
-  const dim=new Date(calYear,calMonth+1,0).getDate();
-  const atCurrent=(calYear===today.getFullYear() && calMonth===today.getMonth());
-  let h=`<div class="cal">
-    <div class="cal-head">
-      <button class="cal-nav" id="calPrev" ${atCurrent?'disabled':''} aria-label="vorige maand">‹</button>
-      <div class="cal-title">${MONTHS[calMonth]} ${calYear}</div>
-      <button class="cal-nav" id="calNext" aria-label="volgende maand">›</button>
-    </div>
-    <div class="cal-grid cal-dow">`;
-  DOW.forEach(d=>h+=`<span class="cal-dowc">${d}</span>`);
-  h+=`</div><div class="cal-grid">`;
-  for(let b=0;b<start;b++) h+=`<span class="cal-empty"></span>`;
-  for(let d=1;d<=dim;d++){
-    const dt=new Date(calYear,calMonth,d);
-    const iso=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const past=dt<today;
-    const sel=state.datum===iso;
-    h+=`<button class="cal-day${sel?' sel':''}" ${past?'disabled':''} data-iso="${iso}">${d}</button>`;
-  }
-  h+=`</div></div>`;
-  wrap.innerHTML=h;
-  wrap.querySelector('#calPrev').onclick=()=>{ if(calMonth===0){calMonth=11;calYear--;}else calMonth--; drawCal(); };
-  wrap.querySelector('#calNext').onclick=()=>{ if(calMonth===11){calMonth=0;calYear++;}else calMonth++; drawCal(); };
-  wrap.querySelectorAll('.cal-day:not([disabled])').forEach(b=>b.onclick=()=>{
-    state.datum=b.dataset.iso; state.flexibel=false;
-    const fc=document.getElementById('flexChip'); if(fc) fc.setAttribute('aria-pressed','false');
-    drawCal(); updateNav();
-  });
-}
 
 function render(){
   steps = buildSteps();
@@ -344,30 +216,17 @@ function render(){
     });
     html += '</div>';
   }
-  else if(step.type==='multi'){
-    html += '<div class="options">';
-    step.options.forEach((o)=>{
-      const on = state.extras.includes(o.v);
-      html += `<button class="opt multi" data-v="${o.v}" aria-checked="${on}">
-        <span class="key">${on?'✓':''}</span>
-        <span class="txt"><b>${esc(o.b)}</b>${o.s?`<small>${esc(o.s)}</small>`:''}</span>
-        ${tickSVG}</button>`;
-    });
-    html += '</div>';
-  }
-  else if(step.type==='date'){
-    let sug='<span class="suggest-label">Voorgestelde momenten</span><div class="date-suggest">';
-    suggestedDates().forEach(s=>{ sug+=`<button class="dsug" data-iso="${s.iso}" aria-pressed="${state.datum===s.iso}"><small>${s.wd}</small><b>${s.lbl}</b></button>`; });
-    sug+='</div><p class="suggest-note">Onder voorbehoud — de definitieve datum bevestigen we op basis van onze planning.</p>';
-    html += sug + `<span class="cal-or">Of kies zelf een datum</span><div id="calWrap"></div>
-      <div class="toggle-row">
-        <button class="chip" id="flexChip" aria-pressed="${state.flexibel}">Ik ben flexibel / last-minute</button>
+  else if(step.type==='address'){
+    html += `<div class="field"><label>Naam ontvanger</label><input id="ontv_naam" value="${esc(state.ontv_naam)}" placeholder="Naam ontvanger"></div>
+      <div class="field"><label>Straat + nummer</label><input id="adres" value="${esc(state.adres)}" placeholder="Havenweg 12"></div>
+      <div class="form-grid">
+        <div class="field"><label>Postcode</label><input id="postcode" value="${esc(state.postcode)}" placeholder="2000"></div>
+        <div class="field"><label>Gemeente</label><input id="gemeente" value="${esc(state.gemeente)}" placeholder="Antwerpen"></div>
       </div>`;
   }
-  else if(step.type==='info'){
-    html += '<div class="info-box"><ul>';
-    step.items.forEach(it=>{ html += `<li><span class="sq"></span><span>${esc(it)}</span></li>`; });
-    html += `</ul></div><p class="info-note">${esc(step.note)}</p>`;
+  else if(step.type==='message'){
+    html += `<div class="field"><label>Persoonlijke boodschap <span style="text-transform:none;letter-spacing:0;font-weight:600">(optioneel)</span></label><textarea id="boodschap" placeholder="Schrijf een woordje voor de gelukkige…">${esc(state.boodschap)}</textarea></div>
+      <div class="field"><label>Voor wie is het? <span style="text-transform:none;letter-spacing:0;font-weight:600">(optioneel)</span></label><input id="voor_wie" value="${esc(state.voor_wie)}" placeholder="bv. Voor mama"></div>`;
   }
   else if(step.type==='form'){
     html += `<div class="form-grid">
@@ -378,95 +237,78 @@ function render(){
       <div class="field"><label>E-mail <span style="text-transform:none;letter-spacing:0;font-weight:600">(optioneel)</span></label><input id="email" type="email" value="${esc(state.email)}" placeholder="jouw@email.be"></div>`;
   }
   else if(step.type==='summary'){
-    const dur = ({'30':'30 minuten','45':'45 minuten','60':'60 minuten','langer':'Op maat'})[state.duur]||'—';
-    const findLabel=(set,v)=>{const a=(set||[]).find(x=>x.v===v);return a?a.b:null;};
-    let routeLabel = findLabel(routeSets[state.vertrek],state.route) ||
-      ({'zelf':'Zelf uitgestippeld','advies':'Advies gevraagd'})[state.route] || '—';
-    const vertrekLabel = ({'antwerpen':'Regio Antwerpen','kust':'Regio Kust','eigen':'Eigen locatie'})[state.vertrek]||'—';
-    const momentLabel = ({'lucht':'In de lucht','grond':'Net na de landing'})[state.moment]||'—';
-    const extrasLabel = state.extras.length ? state.extras.map(e=>({fotograaf:'Fotograaf aan boord',champagne:'Champagne na de vlucht'})[e]).join(' · ') : 'Geen';
+    const isFys = state.bontype==='fysiek';
+    const prijs = isFys ? '€160' : '€150';
+    const bonLabel = isFys ? 'Fysieke bon — €160' : 'Digitale bon — €150';
+    const prijsNoot = isFys ? 'incl. verzending' : 'pdf per e-mail';
+    const adresLabel = [state.ontv_naam, state.adres, ((state.postcode||'')+' '+(state.gemeente||'')).trim()].filter(x=>x && x.trim()).join(', ');
+    html += `<div class="price-hi"><span class="k">Te betalen</span><span class="v">${prijs}</span><span class="s">${prijsNoot}</span></div>`;
     html += `<div class="summary">
-      <div class="row"><span class="k">Moment</span><span class="v">${momentLabel}</span></div>
-      <div class="row"><span class="k">Vertrek</span><span class="v">${vertrekLabel}</span></div>
-      <div class="row"><span class="k">Route</span><span class="v">${esc(routeLabel)}</span></div>
-      <div class="row"><span class="k">Duur</span><span class="v">${dur}</span></div>
-      <div class="row"><span class="k">Datum</span><span class="v">${state.datum||(state.flexibel?'Flexibel':'—')}</span></div>
-      <div class="row"><span class="k">Extra's</span><span class="v">${esc(extrasLabel)}</span></div>
+      <div class="row"><span class="k">Bon</span><span class="v">${bonLabel}</span></div>`;
+    if(isFys) html += `<div class="row"><span class="k">Bezorgadres</span><span class="v">${esc(adresLabel||'—')}</span></div>`;
+    html += `<div class="row"><span class="k">Voor wie</span><span class="v">${esc(state.voor_wie||'—')}</span></div>
     </div>
-    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens aan vast.</b> We bellen je binnenkort op en regelen alles samen met je — timing, route, het teken met de piloot — zodat jij je enkel op het moment moet concentreren. Bij slecht weer of technische uitval boeken we om.</span></div>`;
+    <div class="reassure"><span class="sq"></span><span><b>De bon is 24 maanden geldig.</b> De begunstigde scant de QR-code, kiest een eerste zondag van de maand en geeft naam + gewicht door voor een veilige belading. Wij bellen je op om de bestelling af te ronden.</span></div>`;
   }
 
   html += '</div>';
   stage.innerHTML = html;
 
-  if(step.type==='date'){ if(calYear===undefined) initCal(); drawCal();
-    stage.querySelectorAll('.dsug').forEach(b=>b.onclick=()=>{ state.datum=b.dataset.iso; state.flexibel=false; const dd=new Date(state.datum+'T00:00'); calYear=dd.getFullYear(); calMonth=dd.getMonth(); render(); });
-  }
-
   stage.querySelectorAll('.opt').forEach(el=>{
     el.addEventListener('click',()=>{
       const v = el.dataset.v;
-      if(step.type==='multi'){
-        const idx = state.extras.indexOf(v);
-        if(idx>=0) state.extras.splice(idx,1); else state.extras.push(v);
-        render();
-      } else {
-        state[step.id]=v;
-        setTimeout(()=>{ if(i<steps.length-1){ i++; } render(); }, 180);
-      }
+      state[step.id]=v;
+      setTimeout(()=>{ if(i<steps.length-1){ i++; } render(); }, 180);
       updateNav();
     });
   });
-  const flex=stage.querySelector('#flexChip'); if(flex) flex.onclick=()=>{
-    state.flexibel=!state.flexibel; if(state.flexibel) state.datum='';
-    flex.setAttribute('aria-pressed',state.flexibel); drawCal(); updateNav();
-  };
-  ['voornaam','achternaam','email','tel'].forEach(id=>{const el=stage.querySelector('#'+id); if(el) el.oninput=e=>{state[id]=e.target.value; updateNav();};});
+  ['ontv_naam','adres','postcode','gemeente','boodschap','voor_wie','voornaam','achternaam','email','tel'].forEach(id=>{const el=stage.querySelector('#'+id); if(el) el.oninput=e=>{state[id]=e.target.value; updateNav();};});
 
   updateNav();
 }
 
 function stepValid(){
   const step = steps[i];
-  if(step.optional || step.type==='info' || step.type==='multi' || step.type==='summary') return true;
+  if(step.optional || step.type==='summary') return true;
   if(step.type==='single') return !!state[step.id];
-  if(step.type==='date') return !!(state.datum || state.flexibel);
+  if(step.type==='address') return state.ontv_naam.trim() && state.adres.trim() && state.postcode.trim() && state.gemeente.trim();
   if(step.type==='form') return state.voornaam.trim() && state.achternaam.trim() && state.tel.trim().length>=6;
   return true;
 }
 
 function updateNav(){
   backBtn.disabled = (i===0);
-  nextBtn.textContent = (i===steps.length-1) ? 'Vraag je vlucht aan →' : 'Volgende';
+  nextBtn.textContent = (i===steps.length-1) ? 'Bestel je bon →' : 'Volgende';
   nextBtn.disabled = !stepValid();
   hint.style.visibility = stepValid()? 'visible':'hidden';
 }
 
 function next(){
   if(!stepValid()) return;
-  if(i===steps.length-1){ submitAanvraag(); return; }
+  if(i===steps.length-1){ submitBestelling(); return; }
   i++; nextBtn.style.display=''; render();
 }
 function back(){ if(i>0){ i--; nextBtn.style.display=''; render(); } }
 
-async function submitAanvraag(){
+async function submitBestelling(){
   nextBtn.disabled=true; nextBtn.textContent='Versturen…'; hint.style.visibility='hidden';
-  const payload = { ...state, bron:'huwelijksaanzoek', aangevraagd_op:new Date().toISOString() };
+  const payload = { ...state, bron:'cadeaubon-luchtdoop', besteld_op:new Date().toISOString() };
   let ok = true;
   if(SUBMIT_ENDPOINT){
     try{ const r = await fetch(SUBMIT_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); ok=r.ok; }
     catch(e){ ok=false; }
-  } else { console.log('[Heli-Flights] Aanvraag (geen SUBMIT_ENDPOINT ingesteld):', payload); }
+  } else { console.log('[Heli-Flights] Bestelling (geen SUBMIT_ENDPOINT ingesteld):', payload); }
   ok ? showSuccess() : showError();
 }
 
 function showSuccess(){
   const voornaam=(state.voornaam||'').trim();
+  const isFys = state.bontype==='fysiek';
   stepsBar.innerHTML = steps.map(()=>`<span class="seg done"></span>`).join('');
   stage.innerHTML = `<div class="screen enter" style="text-align:center;max-width:560px;">
-    <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Aanvraag verzonden</span>
-    <h1 class="q" style="text-align:center">Op naar het grote <span class="imp">ja</span>${voornaam?', '+esc(voornaam):''}.</h1>
-    <p class="q-help" style="margin-left:auto;margin-right:auto">We bellen je binnenkort discreet op${state.tel? ' op <b>'+esc(state.tel)+'</b>':''} om alles af te stemmen — timing, route en het teken met de piloot. Bij slecht weer of technische uitval boeken we om.</p>
+    <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Bestelling ontvangen</span>
+    <h1 class="q" style="text-align:center">Een vlucht cadeau${voornaam?', '+esc(voornaam):''} — <span class="imp">geregeld</span>.</h1>
+    <p class="q-help" style="margin-left:auto;margin-right:auto">We bellen je binnenkort op${state.tel? ' op <b>'+esc(state.tel)+'</b>':''} om je bestelling te bevestigen en de ${isFys?'fysieke bon per post te bezorgen':'digitale bon per e-mail te versturen'}. De bon is 24 maanden geldig.</p>
   </div>`;
   backBtn.style.display='none'; nextBtn.style.display='none'; hint.style.visibility='hidden';
   stepCount.textContent='VERZONDEN';
@@ -474,7 +316,7 @@ function showSuccess(){
 function showError(){
   stage.innerHTML = `<div class="screen enter" style="max-width:560px;">
     <span class="eyebrow"><span class="sq"></span>Er ging iets mis</span>
-    <h1 class="q">Aanvraag <span class="imp">niet verstuurd</span></h1>
+    <h1 class="q">Bestelling <span class="imp">niet verstuurd</span></h1>
     <p class="q-help">Probeer het opnieuw. Lukt het niet, bel ons dan rechtstreeks — we helpen je meteen verder.</p>
   </div>`;
   nextBtn.style.display=''; nextBtn.disabled=false; nextBtn.textContent='Opnieuw proberen →'; hint.style.visibility='hidden';

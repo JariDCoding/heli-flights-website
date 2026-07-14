@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Huwelijksaanzoek — Aanvraag · Heli-Flights</title>
+<title>Vlucht per stoel — Reserveren · Heli-Flights</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
@@ -67,12 +67,57 @@
   .opt[aria-checked="true"] .tick{opacity:1;}
   .opt.multi .key{border-radius:4px;}
 
-  .stepper{display:flex; align-items:center; gap:22px; margin-top:34px;}
-  .stepper button{width:56px; height:56px; border:1.5px solid var(--line-2); background:var(--white);
-    border-radius:3px; font-size:26px; font-weight:600; cursor:pointer; color:var(--ink); font-family:inherit;}
-  .stepper button:hover{border-color:var(--red); color:var(--red);}
-  .stepper .val{font-size:56px; font-weight:800; min-width:70px; text-align:center; font-variant-numeric:tabular-nums;}
-  .stepper .unit{color:var(--muted); font-size:15px;}
+  /* seat picker — top-down EC120 */
+  .seat-count{display:flex; gap:10px; margin-top:12px;}
+  .seat-count button{flex:1; padding:15px 0; border:1.5px solid var(--line-2); background:var(--white);
+    border-radius:3px; font-family:inherit; font-weight:800; font-size:19px; cursor:pointer; color:var(--ink);
+    transition:border-color .15s, background .15s, color .15s;}
+  .seat-count button:hover{border-color:var(--line-2);}
+  .seat-count button[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
+
+  .heli{max-width:320px; margin:30px auto 0;}
+  .heli-rotor{position:relative; height:38px; margin-bottom:-4px;}
+  .heli-rotor span{position:absolute; left:50%; top:50%; width:190px; height:4px; background:var(--line-2); border-radius:2px;}
+  .heli-rotor span:nth-child(1){transform:translate(-50%,-50%) rotate(34deg);}
+  .heli-rotor span:nth-child(2){transform:translate(-50%,-50%) rotate(-34deg);}
+  .heli-rotor i{position:absolute; left:50%; top:50%; width:15px; height:15px; border-radius:50%;
+    background:var(--line-2); transform:translate(-50%,-50%);}
+  .heli-body{background:var(--white); border:1.5px solid var(--line); border-radius:130px 130px 26px 26px;
+    padding:34px 22px 24px; position:relative;}
+  .heli-front{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
+  .heli-rear{display:grid; grid-template-columns:1fr 1fr 1fr; gap:11px;}
+  .seat{aspect-ratio:1; border-radius:11px; border:1.5px solid var(--line-2); background:var(--ground);
+    display:flex; align-items:center; justify-content:center; font-family:inherit; font-weight:800;
+    font-size:20px; color:var(--muted); cursor:pointer; transition:background .15s, border-color .15s, color .15s;}
+  .seat:hover{border-color:var(--red);}
+  .seat.occupied{background:var(--red); border-color:var(--red); color:#fff;}
+  .seat.pilot{background:var(--ink); border-color:var(--ink); color:#fff; cursor:default;
+    font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;}
+  .heli-tail{width:22px; height:44px; background:var(--white); border:1.5px solid var(--line); border-top:none;
+    border-radius:0 0 9px 9px; margin:-1px auto 0; position:relative;}
+  .heli-tail i{position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); width:18px; height:18px;
+    border-radius:50%; background:var(--white); border:1.5px solid var(--line);}
+  .price-tag{text-align:center; margin-top:26px;}
+  .price-tag .amt{font-weight:800; font-size:clamp(44px,8vw,62px); line-height:1; color:var(--ink); font-variant-numeric:tabular-nums;}
+  .price-tag .lbl{color:var(--muted); font-size:14.5px; font-weight:600; margin-top:8px;}
+
+  /* passengers — name + weight (W&B) */
+  .pax{display:grid; gap:16px; margin-top:28px;}
+  .pax-card{background:var(--white); border:1.5px solid var(--line); border-radius:3px; padding:18px 20px 20px;}
+  .pax-head{display:flex; align-items:center; gap:11px; margin-bottom:14px;}
+  .pax-num{width:28px; height:28px; border-radius:50%; background:var(--red); color:#fff; flex:none;
+    display:grid; place-items:center; font-weight:800; font-size:14px;}
+  .pax-title{font-weight:800; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink);}
+  .pax-weight{margin-top:16px;}
+  .pax-wtop{display:flex; align-items:baseline; justify-content:space-between;}
+  .pax-wtop .lab{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .pax-wtop .num{font-weight:800; font-size:26px; font-variant-numeric:tabular-nums; display:inline-flex; align-items:baseline; gap:3px;}
+  .pax-wtop .num i{font-size:14px; color:var(--muted); font-weight:700; font-style:normal;}
+  .slider{-webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:3px; background:var(--line); outline:none; margin-top:14px;}
+  .slider::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:28px; height:28px; border-radius:50%;
+    background:var(--red); cursor:pointer; border:3px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,.28);}
+  .slider::-moz-range-thumb{width:28px; height:28px; border-radius:50%; background:var(--red); cursor:pointer; border:3px solid #fff;}
+  .slider-ends{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-weight:600; margin-top:8px;}
 
   .field{margin-top:22px;}
   .field label{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
@@ -113,12 +158,6 @@
   .chip{padding:11px 16px; border:1.5px solid var(--line-2); background:var(--white); border-radius:999px;
     font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; color:var(--ink);}
   .chip[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
-
-  .info-box{margin-top:26px; background:var(--white); border:1.5px solid var(--line); border-left:3px solid var(--red); border-radius:3px; padding:22px 24px;}
-  .info-box ul{list-style:none; display:grid; gap:12px;}
-  .info-box li{display:flex; gap:12px; font-size:15px;}
-  .info-box li .sq{width:8px; height:8px; background:var(--red); margin-top:7px; flex:none;}
-  .info-note{margin-top:16px; font-size:13.5px; color:var(--muted);}
 
   .summary{margin-top:26px; background:var(--white); border:1.5px solid var(--line); border-radius:3px; overflow:hidden;}
   .summary .row{display:flex; justify-content:space-between; gap:16px; padding:15px 22px; border-bottom:1px solid var(--line); font-size:15px;}
@@ -166,79 +205,33 @@
 
 <script>
 const state = {
-  moment:null, vertrek:null, route:null, duur:null, datum:'', flexibel:false,
-  extras:[], voornaam:'', achternaam:'', email:'', tel:''
+  aantal:1,
+  passengers:[{naam:'',gewicht:80}],
+  datum:'', flexibel:false,
+  voornaam:'', achternaam:'', email:'', tel:''
 };
 
-// ── Waar de aanvraag naartoe gaat. Vul in met je CRM-webhook of Zapier catch-hook.
-//    Leeg = de aanvraag wordt in de console gelogd (voor testen).
+// ── Waar de reservatie naartoe gaat. Vul in met je CRM-webhook of Zapier catch-hook.
+//    Leeg = de reservatie wordt in de console gelogd (voor testen).
 const SUBMIT_ENDPOINT = ''; // bv. 'https://crm.heli-flights.be/api/leads'
 
-const routeSets = {
-  antwerpen:[
-    {v:'skyline', b:'Skyline & Schelde', s:'Het Steen · kathedraal · MAS · Havenhuis'},
-    {v:'haven', b:'Haven & Forten', s:'De haven · de dokken · de fortengordel'},
-  ],
-  kust:[
-    {v:'kustlijn', b:'Kustlijn Knokke–Oostende', s:'Zwin · Knokke · Blankenberge · Zeebrugge'},
-    {v:'brugge', b:'Brugge & Zwin', s:'Historisch Brugge · het Zwin · de duinen'},
-  ],
-  eigen:[]
-};
+function syncPassengers(){
+  const arr = state.passengers;
+  while(arr.length < state.aantal) arr.push({naam:'', gewicht:80});
+  while(arr.length > state.aantal) arr.pop();
+}
 
 function buildSteps(){
   const s = [];
-  s.push({id:'moment', type:'single', label:'Moment', q:'Waar stel je de grote <span class="imp">vraag</span>?',
-    help:'Kies het moment dat bij jullie past. We stemmen alles vooraf discreet af.',
-    options:[
-      {v:'lucht', b:'In de lucht', s:'Tijdens de vlucht — we spreken het teken vooraf af met de piloot'},
-      {v:'grond', b:'Net na de landing', s:'Op de grond, mooi met een klaarstaand flesje champagne'},
-    ]});
-  s.push({id:'vertrek', type:'single', label:'Vertrek', q:'Vanwaar wil je <span class="imp">vertrekken</span>?',
-    help:'Kies de dichtstbijzijnde basis, of vertrek vanaf je eigen locatie.',
-    options:[
-      {v:'antwerpen', b:'Regio Antwerpen', s:'Ranst · Nijlen · Lier · Ravels'},
-      {v:'kust', b:'Regio Kust', s:'Zeebrugge · Knokke'},
-      {v:'eigen', b:'Eigen locatie', s:'Pickup & dropoff op maat'},
-    ]});
-  if(state.vertrek==='eigen'){
-    s.push({id:'voorwaarden', type:'info', label:'Eigen locatie', q:'Even dit over je <span class="imp">eigen locatie</span>',
-      help:'Vertrek of landing op je eigen terrein kan, als het aan deze voorwaarden voldoet:',
-      items:[
-        'Een vrij terrein van minstens 30 × 15 meter',
-        'Een obstakelvrije aan- en uitvliegroute (geen hoge bomen, kabels of masten)',
-        'Een vaste, egale ondergrond zonder los materiaal',
-        'Schriftelijke toelating van de eigenaar of huurder',
-      ],
-      note:'Goed om te weten: de vliegtijd van en naar je locatie (vanaf onze basis) telt mee in de totale vluchttijd.'});
-  }
-  const rs = state.vertrek ? routeSets[state.vertrek].slice() : [];
-  const routeOpts = rs.concat([
-    {v:'zelf', b:'Ik stippel zelf uit', s:'Over een plek die iets betekent voor jullie'},
-    {v:'advies', b:'Laat ons adviseren', s:'We stellen samen de mooiste route voor'},
-  ]);
-  s.push({id:'route', type:'single', label:'Route', q:'Welke <span class="imp">route</span> wil je vliegen?',
-    help: state.vertrek==='eigen' ? 'Bepaal vrij je route binnen de toegelaten luchtruimtes.' : 'Kies een uitgewerkte klassieker, of stippel je eigen route uit.',
-    options: routeOpts});
-  s.push({id:'duur', type:'single', label:'Duur', q:'Hoe lang wil je <span class="imp">in de lucht</span>?',
-    help:'Elke privévlucht duurt minstens 30 minuten. Een langere, volledig eigen route stippelen we samen uit.',
-    options:[
-      {v:'30', b:'30 minuten', s:'Een intiem moment boven de mooiste plekken'},
-      {v:'45', b:'45 minuten', s:'Wat meer tijd om van het uitzicht te genieten'},
-      {v:'60', b:'60 minuten', s:'Uitgebreid, alle tijd voor het moment'},
-      {v:'langer', b:'Langer / op maat', s:'We bespreken je volledige route (min. 30 min)'},
-    ]});
+  s.push({id:'seats', type:'seats', label:'Stoelen', q:'Hoeveel <span class="imp">stoelen</span> wil je?',
+    help:'Je boekt per stoel — €150 per persoon. Een vlucht vertrekt bij 4 volzette stoelen; raakt ze niet vol, dan schuift je stoel door naar een volgende eerste zondag.'});
+  s.push({id:'passengers', type:'passengers', label:'Passagiers', q:'Wie gaat er <span class="imp">mee</span>?',
+    help:'We noteren per passagier de naam en het gewicht. Dat hebben we nodig voor een veilige, evenwichtige belading (weight & balance).'});
   s.push({id:'wanneer', type:'date', label:'Datum', q:'Wanneer wil je <span class="imp">vliegen</span>?',
-    help:'Voor zo\'n moment prikken we bij voorkeur meteen een reservedatum. Liefst 2 weken vooraf.'});
-  s.push({id:'extras', type:'multi', label:'Extra’s', q:'Wil je er iets aan <span class="imp">toevoegen</span>?',
-    help:'Optioneel. Onze troef: we verzorgen dit ook op locatie.',
-    options:[
-      {v:'fotograaf', b:'Fotograaf aan boord', s:'Legt het aanzoek voor altijd vast'},
-      {v:'champagne', b:'Champagne na de vlucht', s:'Een toast op de grond'},
-    ]});
-  s.push({id:'contact', type:'form', label:'Contact', q:'Hoe mogen we je <span class="imp">bereiken</span>?',
-    help:'Meestal is dit een verrassing — we bellen je discreet op om alles af te stemmen.'});
-  s.push({id:'bevestig', type:'summary', label:'Contact', q:'Klaar om <span class="imp">aan te vragen</span>?',
+    help:'Vluchten gaan door op de eerste zondag van de maand. Vertrek vanaf Ranst, Nijlen of Lier — definitieve locatie en uur bevestigen we 1–2 dagen vooraf.'});
+  s.push({id:'contact', type:'form', label:'Contact', q:'Waar mogen we je <span class="imp">bereiken</span>?',
+    help:'We bellen je op om je stoel(en) te bevestigen.'});
+  s.push({id:'bevestig', type:'summary', label:'Overzicht', q:'Klaar om je <span class="imp">stoel</span> te reserveren?',
     help:'Check even je keuzes. Je zit nog nergens aan vast.'});
   return s;
 }
@@ -254,29 +247,33 @@ const nextBtn = document.getElementById('nextBtn');
 const stepCount = document.getElementById('stepCount');
 const hint = document.getElementById('hint');
 
-const tickSVG = '<svg class="tick" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11.5l4.5 4.5L18 6" stroke="#AD0404" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
 function esc(s){return (s||'').replace(/</g,'&lt;');}
 
 const MONTHS=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
 const DOW=['ma','di','wo','do','vr','za','zo'];
+const MN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
-// TODO: voorgestelde datums later voeden vanuit de CRM-planning/beschikbaarheid
+function setSlider(el){const min=+el.min,max=+el.max,v=+el.value; const pct=((v-min)/(max-min))*100;
+  el.style.background=`linear-gradient(to right, var(--red) 0%, var(--red) ${pct}%, var(--line) ${pct}%, var(--line) 100%)`;}
+
+// Voorgestelde momenten = de eerstvolgende 3 eerste-zondagen van de maand.
 function suggestedDates(){
-  const out=[]; const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+1);
-  const dn=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
-  const mn=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-  let guard=0;
-  while(out.length<4 && guard<60){ guard++;
-    const day=d.getDay();
-    if(day===6||day===0){
-      const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      out.push({iso, wd:dn[day], lbl:`${d.getDate()} ${mn[d.getMonth()]}`});
+  const out=[]; const today=new Date(); today.setHours(0,0,0,0);
+  let y=today.getFullYear(), m=today.getMonth(), guard=0;
+  while(out.length<3 && guard<24){ guard++;
+    const first=new Date(y,m,1);
+    const day=1+((7-first.getDay())%7);          // eerste zondag (zo=0)
+    const d=new Date(y,m,day);
+    if(d>=today){
+      const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      out.push({iso, wd:'zondag', lbl:`${day} ${MN[m]}`});
     }
-    d.setDate(d.getDate()+1);
+    m++; if(m>11){m=0;y++;}
   }
   return out;
 }
+function fmtDatum(iso){ const d=new Date(iso+'T00:00'); return `zondag ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`; }
+
 function initCal(){
   const t=new Date();
   if(state.datum){ const d=new Date(state.datum+'T00:00'); calYear=d.getFullYear(); calMonth=d.getMonth(); }
@@ -317,6 +314,11 @@ function drawCal(){
   });
 }
 
+function seatHTML(n){
+  const occ = n<=state.aantal;
+  return `<button class="seat${occ?' occupied':''}" data-seat="${n}" aria-label="stoel ${n}">${n}</button>`;
+}
+
 function render(){
   steps = buildSteps();
   if(i>=steps.length) i=steps.length-1;
@@ -332,28 +334,36 @@ function render(){
   html += `<h1 class="q">${step.q}</h1>`;
   if(step.help) html += `<p class="q-help">${esc(step.help)}</p>`;
 
-  if(step.type==='single'){
-    html += '<div class="options">';
-    step.options.forEach((o,idx)=>{
-      const cur = state[step.id];
-      const on = cur===o.v;
-      html += `<button class="opt" data-v="${o.v}" aria-checked="${on}">
-        <span class="key">${String.fromCharCode(65+idx)}</span>
-        <span class="txt"><b>${esc(o.b)}</b>${o.s?`<small>${esc(o.s)}</small>`:''}</span>
-        ${tickSVG}</button>`;
-    });
-    html += '</div>';
+  if(step.type==='seats'){
+    html += `<span class="suggest-label" style="margin-top:30px">Aantal plaatsen</span><div class="seat-count">`;
+    [1,2,3,4].forEach(n=>{ html+=`<button data-aantal="${n}" aria-pressed="${state.aantal===n}">${n}</button>`; });
+    html += `</div>
+      <div class="heli">
+        <div class="heli-rotor"><span></span><span></span><i></i></div>
+        <div class="heli-body">
+          <div class="heli-front"><div class="seat pilot">Piloot</div>${seatHTML(4)}</div>
+          <div class="heli-rear">${seatHTML(1)}${seatHTML(2)}${seatHTML(3)}</div>
+        </div>
+        <div class="heli-tail"><i></i></div>
+      </div>`;
+    const total = state.aantal*150;
+    html += `<div class="price-tag"><div class="amt">€${total}</div><div class="lbl">${state.aantal} ${state.aantal>1?'stoelen':'stoel'} × €150</div></div>`;
   }
-  else if(step.type==='multi'){
-    html += '<div class="options">';
-    step.options.forEach((o)=>{
-      const on = state.extras.includes(o.v);
-      html += `<button class="opt multi" data-v="${o.v}" aria-checked="${on}">
-        <span class="key">${on?'✓':''}</span>
-        <span class="txt"><b>${esc(o.b)}</b>${o.s?`<small>${esc(o.s)}</small>`:''}</span>
-        ${tickSVG}</button>`;
+  else if(step.type==='passengers'){
+    syncPassengers();
+    html += '<div class="pax">';
+    state.passengers.forEach((p,idx)=>{
+      html += `<div class="pax-card">
+        <div class="pax-head"><span class="pax-num">${idx+1}</span><span class="pax-title">Passagier ${idx+1}</span></div>
+        <div class="field" style="margin-top:0"><label>Naam</label><input class="pax-naam" data-idx="${idx}" value="${esc(p.naam)}" placeholder="Naam van de passagier"></div>
+        <div class="pax-weight">
+          <div class="pax-wtop"><span class="lab">Gewicht</span><span class="num"><span class="pax-wval" data-idx="${idx}">${p.gewicht}</span><i>kg</i></span></div>
+          <input type="range" min="50" max="140" step="1" value="${p.gewicht}" class="slider pax-slider" data-idx="${idx}" aria-label="gewicht passagier ${idx+1}">
+          <div class="slider-ends"><span>50 kg</span><span>140 kg</span></div>
+        </div>
+      </div>`;
     });
-    html += '</div>';
+    html += `</div><p class="suggest-note" style="margin-top:20px">Max ± 120 kg per persoon voor een veilige en evenwichtige belading. We houden hier intern rekening mee (weight &amp; balance).</p>`;
   }
   else if(step.type==='date'){
     let sug='<span class="suggest-label">Voorgestelde momenten</span><div class="date-suggest">';
@@ -364,11 +374,6 @@ function render(){
         <button class="chip" id="flexChip" aria-pressed="${state.flexibel}">Ik ben flexibel / last-minute</button>
       </div>`;
   }
-  else if(step.type==='info'){
-    html += '<div class="info-box"><ul>';
-    step.items.forEach(it=>{ html += `<li><span class="sq"></span><span>${esc(it)}</span></li>`; });
-    html += `</ul></div><p class="info-note">${esc(step.note)}</p>`;
-  }
   else if(step.type==='form'){
     html += `<div class="form-grid">
         <div class="field"><label>Voornaam</label><input id="voornaam" value="${esc(state.voornaam)}" placeholder="Voornaam"></div>
@@ -378,85 +383,79 @@ function render(){
       <div class="field"><label>E-mail <span style="text-transform:none;letter-spacing:0;font-weight:600">(optioneel)</span></label><input id="email" type="email" value="${esc(state.email)}" placeholder="jouw@email.be"></div>`;
   }
   else if(step.type==='summary'){
-    const dur = ({'30':'30 minuten','45':'45 minuten','60':'60 minuten','langer':'Op maat'})[state.duur]||'—';
-    const findLabel=(set,v)=>{const a=(set||[]).find(x=>x.v===v);return a?a.b:null;};
-    let routeLabel = findLabel(routeSets[state.vertrek],state.route) ||
-      ({'zelf':'Zelf uitgestippeld','advies':'Advies gevraagd'})[state.route] || '—';
-    const vertrekLabel = ({'antwerpen':'Regio Antwerpen','kust':'Regio Kust','eigen':'Eigen locatie'})[state.vertrek]||'—';
-    const momentLabel = ({'lucht':'In de lucht','grond':'Net na de landing'})[state.moment]||'—';
-    const extrasLabel = state.extras.length ? state.extras.map(e=>({fotograaf:'Fotograaf aan boord',champagne:'Champagne na de vlucht'})[e]).join(' · ') : 'Geen';
+    const total = state.aantal*150;
+    const namen = state.passengers.map(p=>p.naam.trim()).filter(Boolean).join(', ') || '—';
+    const datumLabel = state.datum ? fmtDatum(state.datum) : (state.flexibel?'Flexibel':'—');
     html += `<div class="summary">
-      <div class="row"><span class="k">Moment</span><span class="v">${momentLabel}</span></div>
-      <div class="row"><span class="k">Vertrek</span><span class="v">${vertrekLabel}</span></div>
-      <div class="row"><span class="k">Route</span><span class="v">${esc(routeLabel)}</span></div>
-      <div class="row"><span class="k">Duur</span><span class="v">${dur}</span></div>
-      <div class="row"><span class="k">Datum</span><span class="v">${state.datum||(state.flexibel?'Flexibel':'—')}</span></div>
-      <div class="row"><span class="k">Extra's</span><span class="v">${esc(extrasLabel)}</span></div>
+      <div class="row"><span class="k">Aantal stoelen</span><span class="v">${state.aantal}</span></div>
+      <div class="row"><span class="k">Totaal</span><span class="v">€${total}</span></div>
+      <div class="row"><span class="k">Passagiers</span><span class="v">${esc(namen)}</span></div>
+      <div class="row"><span class="k">Datum</span><span class="v">${esc(datumLabel)}</span></div>
     </div>
-    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens aan vast.</b> We bellen je binnenkort op en regelen alles samen met je — timing, route, het teken met de piloot — zodat jij je enkel op het moment moet concentreren. Bij slecht weer of technische uitval boeken we om.</span></div>`;
+    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens definitief aan vast.</b> We bellen je op om je stoel(en) te bevestigen. De vlucht vertrekt bij 4 volzette stoelen; bij slecht weer of onvolledige vulling schuift je stoel door naar een volgende eerste zondag (binnen 24 maanden).</span></div>`;
   }
 
   html += '</div>';
   stage.innerHTML = html;
 
+  if(step.type==='seats'){
+    stage.querySelectorAll('[data-aantal]').forEach(b=>b.onclick=()=>{ state.aantal=+b.dataset.aantal; syncPassengers(); render(); });
+    stage.querySelectorAll('[data-seat]').forEach(b=>b.onclick=()=>{ state.aantal=+b.dataset.seat; syncPassengers(); render(); });
+  }
+  if(step.type==='passengers'){
+    stage.querySelectorAll('.pax-naam').forEach(el=>el.oninput=e=>{ state.passengers[+e.target.dataset.idx].naam=e.target.value; updateNav(); });
+    stage.querySelectorAll('.pax-slider').forEach(el=>{ setSlider(el); el.oninput=e=>{
+      const idx=+e.target.dataset.idx; state.passengers[idx].gewicht=+e.target.value;
+      const v=stage.querySelector('.pax-wval[data-idx="'+idx+'"]'); if(v) v.textContent=e.target.value;
+      setSlider(e.target);
+    }; });
+  }
   if(step.type==='date'){ if(calYear===undefined) initCal(); drawCal();
     stage.querySelectorAll('.dsug').forEach(b=>b.onclick=()=>{ state.datum=b.dataset.iso; state.flexibel=false; const dd=new Date(state.datum+'T00:00'); calYear=dd.getFullYear(); calMonth=dd.getMonth(); render(); });
+    const flex=stage.querySelector('#flexChip'); if(flex) flex.onclick=()=>{
+      state.flexibel=!state.flexibel; if(state.flexibel) state.datum='';
+      flex.setAttribute('aria-pressed',state.flexibel); drawCal(); updateNav();
+    };
   }
-
-  stage.querySelectorAll('.opt').forEach(el=>{
-    el.addEventListener('click',()=>{
-      const v = el.dataset.v;
-      if(step.type==='multi'){
-        const idx = state.extras.indexOf(v);
-        if(idx>=0) state.extras.splice(idx,1); else state.extras.push(v);
-        render();
-      } else {
-        state[step.id]=v;
-        setTimeout(()=>{ if(i<steps.length-1){ i++; } render(); }, 180);
-      }
-      updateNav();
-    });
-  });
-  const flex=stage.querySelector('#flexChip'); if(flex) flex.onclick=()=>{
-    state.flexibel=!state.flexibel; if(state.flexibel) state.datum='';
-    flex.setAttribute('aria-pressed',state.flexibel); drawCal(); updateNav();
-  };
-  ['voornaam','achternaam','email','tel'].forEach(id=>{const el=stage.querySelector('#'+id); if(el) el.oninput=e=>{state[id]=e.target.value; updateNav();};});
+  if(step.type==='form'){
+    ['voornaam','achternaam','email','tel'].forEach(id=>{const el=stage.querySelector('#'+id); if(el) el.oninput=e=>{state[id]=e.target.value; updateNav();};});
+  }
 
   updateNav();
 }
 
 function stepValid(){
   const step = steps[i];
-  if(step.optional || step.type==='info' || step.type==='multi' || step.type==='summary') return true;
-  if(step.type==='single') return !!state[step.id];
+  if(step.type==='seats') return state.aantal>=1;
+  if(step.type==='passengers') return state.passengers.length===state.aantal && state.passengers.every(p=>p.naam.trim() && p.gewicht>0);
   if(step.type==='date') return !!(state.datum || state.flexibel);
   if(step.type==='form') return state.voornaam.trim() && state.achternaam.trim() && state.tel.trim().length>=6;
+  if(step.type==='summary') return true;
   return true;
 }
 
 function updateNav(){
   backBtn.disabled = (i===0);
-  nextBtn.textContent = (i===steps.length-1) ? 'Vraag je vlucht aan →' : 'Volgende';
+  nextBtn.textContent = (i===steps.length-1) ? 'Reserveer je stoel →' : 'Volgende';
   nextBtn.disabled = !stepValid();
   hint.style.visibility = stepValid()? 'visible':'hidden';
 }
 
 function next(){
   if(!stepValid()) return;
-  if(i===steps.length-1){ submitAanvraag(); return; }
+  if(i===steps.length-1){ submitReservatie(); return; }
   i++; nextBtn.style.display=''; render();
 }
 function back(){ if(i>0){ i--; nextBtn.style.display=''; render(); } }
 
-async function submitAanvraag(){
+async function submitReservatie(){
   nextBtn.disabled=true; nextBtn.textContent='Versturen…'; hint.style.visibility='hidden';
-  const payload = { ...state, bron:'huwelijksaanzoek', aangevraagd_op:new Date().toISOString() };
+  const payload = { ...state, bron:'vlucht-per-stoel', totaal:state.aantal*150, gereserveerd_op:new Date().toISOString() };
   let ok = true;
   if(SUBMIT_ENDPOINT){
     try{ const r = await fetch(SUBMIT_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); ok=r.ok; }
     catch(e){ ok=false; }
-  } else { console.log('[Heli-Flights] Aanvraag (geen SUBMIT_ENDPOINT ingesteld):', payload); }
+  } else { console.log('[Heli-Flights] Reservatie (geen SUBMIT_ENDPOINT ingesteld):', payload); }
   ok ? showSuccess() : showError();
 }
 
@@ -464,9 +463,9 @@ function showSuccess(){
   const voornaam=(state.voornaam||'').trim();
   stepsBar.innerHTML = steps.map(()=>`<span class="seg done"></span>`).join('');
   stage.innerHTML = `<div class="screen enter" style="text-align:center;max-width:560px;">
-    <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Aanvraag verzonden</span>
-    <h1 class="q" style="text-align:center">Op naar het grote <span class="imp">ja</span>${voornaam?', '+esc(voornaam):''}.</h1>
-    <p class="q-help" style="margin-left:auto;margin-right:auto">We bellen je binnenkort discreet op${state.tel? ' op <b>'+esc(state.tel)+'</b>':''} om alles af te stemmen — timing, route en het teken met de piloot. Bij slecht weer of technische uitval boeken we om.</p>
+    <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Reservatie verzonden</span>
+    <h1 class="q" style="text-align:center">Tot in de <span class="imp">lucht</span>${voornaam?', '+esc(voornaam):''}.</h1>
+    <p class="q-help" style="margin-left:auto;margin-right:auto">We bellen je op${state.tel? ' op <b>'+esc(state.tel)+'</b>':''} om je stoel(en) te bevestigen. De vlucht vertrekt bij 4 volzette stoelen; raakt ze niet vol of speelt het weer op, dan schuift je stoel door naar een volgende eerste zondag.</p>
   </div>`;
   backBtn.style.display='none'; nextBtn.style.display='none'; hint.style.visibility='hidden';
   stepCount.textContent='VERZONDEN';
@@ -474,7 +473,7 @@ function showSuccess(){
 function showError(){
   stage.innerHTML = `<div class="screen enter" style="max-width:560px;">
     <span class="eyebrow"><span class="sq"></span>Er ging iets mis</span>
-    <h1 class="q">Aanvraag <span class="imp">niet verstuurd</span></h1>
+    <h1 class="q">Reservatie <span class="imp">niet verstuurd</span></h1>
     <p class="q-help">Probeer het opnieuw. Lukt het niet, bel ons dan rechtstreeks — we helpen je meteen verder.</p>
   </div>`;
   nextBtn.style.display=''; nextBtn.disabled=false; nextBtn.textContent='Opnieuw proberen →'; hint.style.visibility='hidden';

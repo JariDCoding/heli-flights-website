@@ -1,1157 +1,478 @@
-<!doctype html>
-<html lang="en-US" class="no-js">
+<title>Privé Rondvlucht — Aanvraag · Heli-Flights</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --red:#AD0404; --red-dark:#8A0303;
+    --ink:#1E1C1D; --white:#FFFFFF; --ground:#F3F3F4;
+    --muted:#6E6C6D; --line:#DEDEDF; --line-2:#CBCBCC;
+    --tint:#FBEDED;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    font-size:17px; line-height:1.5; overflow:hidden;
+  }
+  .app{height:100dvh; display:flex; flex-direction:column;}
 
-<!-- Mirrored from heli-flights.be/prive-rondvlucht-aanvraag/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 17 May 2026 19:15:57 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" /><title>Prive rondvlucht aanvraag &#8211; Heli-flights</title>
-<meta name='robots' content='max-image-preview:large' />
-<link rel='dns-prefetch' href='http://fonts.googleapis.com/' />
-<link rel="alternate" type="application/rss+xml" title="Heli-flights &raquo; Feed" href="../feed/index.html" />
-<link rel="alternate" type="application/rss+xml" title="Heli-flights &raquo; Comments Feed" href="../comments/feed/index.html" />
-<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="../wp-json/oembed/1.0/embed4ee2.json?url=https%3A%2F%2Fheli-flights.be%2Fprive-rondvlucht-aanvraag%2F" />
-<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="../wp-json/oembed/1.0/embedd62f?url=https%3A%2F%2Fheli-flights.be%2Fprive-rondvlucht-aanvraag%2F&amp;format=xml" />
-<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
-img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
-/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; border-bottom:1px solid var(--line); background:var(--white); flex:none;
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.02em; font-size:15px;}
+  .logo .mark{width:16px; height:16px; background:var(--red); display:inline-block;
+    clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);}
+  .logo span{color:var(--muted); font-weight:700;}
+  .step-count{font-size:12px; font-weight:800; letter-spacing:.12em; color:var(--ink); font-variant-numeric:tabular-nums;}
+  .step-count em{color:var(--muted); font-style:normal; font-weight:700;}
+
+  /* segmented step indicator */
+  .steps{display:flex; gap:4px; padding:12px 28px; background:var(--white); border-bottom:1px solid var(--line); flex:none;}
+  .steps .seg{height:4px; flex:1; background:var(--line); border-radius:2px; transition:background .3s;}
+  .steps .seg.done{background:var(--red);}
+
+  .stage{flex:1; overflow-y:auto; display:flex; align-items:center; justify-content:center; padding:32px 24px;}
+  .screen{width:100%; max-width:720px; margin:0 auto;}
+  .screen.enter{animation:rise .4s cubic-bezier(.2,.7,.2,1);}
+  @keyframes rise{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion:reduce){ .screen.enter{animation:none;} .steps .seg{transition:none;} }
+
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin-bottom:16px;}
+  .eyebrow .sq{width:9px; height:9px; background:var(--red);}
+  .eyebrow em{color:var(--muted); font-style:normal; font-weight:700;}
+
+  /* Titles: H2 scale; display treatment only on impact words */
+  h1.q{font-weight:500; letter-spacing:-.01em; line-height:1.12; font-size:clamp(24px,3.4vw,38px); text-wrap:balance;}
+  h1.q .imp{font-weight:800; text-transform:uppercase; letter-spacing:-.01em;}
+  .q-help{color:var(--muted); font-size:16px; margin-top:14px; max-width:56ch;}
+
+  .options{display:grid; gap:12px; margin-top:30px;}
+  .opt{display:flex; align-items:center; gap:16px; width:100%; text-align:left;
+    background:var(--white); border:1.5px solid var(--line); border-radius:3px;
+    padding:18px 20px; cursor:pointer; font-family:inherit; font-size:17px; color:var(--ink);
+    transition:border-color .15s, background .15s, transform .05s;}
+  .opt:hover{border-color:var(--line-2);}
+  .opt:active{transform:translateY(1px);}
+  .opt .key{width:26px; height:26px; flex:none; border:1.5px solid var(--line-2); border-radius:3px;
+    display:grid; place-items:center; font-size:12px; font-weight:800; color:var(--muted);}
+  .opt .txt{flex:1;}
+  .opt .txt b{display:block; font-weight:700; letter-spacing:.01em;}
+  .opt .txt small{color:var(--muted); font-size:13.5px; font-weight:400;}
+  .opt .tick{width:22px; height:22px; flex:none; opacity:0; transition:opacity .15s;}
+  .opt[aria-checked="true"]{border-color:var(--red); background:var(--tint);}
+  .opt[aria-checked="true"] .key{background:var(--red); color:#fff; border-color:var(--red);}
+  .opt[aria-checked="true"] .tick{opacity:1;}
+  .opt.multi .key{border-radius:4px;}
+
+  .stepper{display:flex; align-items:center; gap:22px; margin-top:34px;}
+  .stepper button{width:56px; height:56px; border:1.5px solid var(--line-2); background:var(--white);
+    border-radius:3px; font-size:26px; font-weight:600; cursor:pointer; color:var(--ink); font-family:inherit;}
+  .stepper button:hover{border-color:var(--red); color:var(--red);}
+  .stepper .val{font-size:56px; font-weight:800; min-width:70px; text-align:center; font-variant-numeric:tabular-nums;}
+  .stepper .unit{color:var(--muted); font-size:15px;}
+
+  .field{margin-top:22px;}
+  .field label{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .field input{width:100%; padding:15px 16px; font-family:inherit; font-size:17px; color:var(--ink);
+    background:var(--white); border:1.5px solid var(--line-2); border-radius:3px;}
+  .field input::placeholder{color:#b3b1b2;}
+  .field input:focus{outline:none; border-color:var(--red);}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:560px){ .form-grid{grid-template-columns:1fr;} }
+
+  /* Calendly-style calendar */
+  .cal{background:var(--white); border:1.5px solid var(--line); border-radius:4px; padding:18px; max-width:390px; margin-top:26px;}
+  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .cal-title{font-weight:800; font-size:16px; letter-spacing:.01em; text-transform:capitalize;}
+  .cal-nav{width:36px;height:36px;border:1.5px solid var(--line-2); background:var(--white); border-radius:3px; cursor:pointer; font-size:18px; color:var(--ink); line-height:1;}
+  .cal-nav:hover:not(:disabled){border-color:var(--red); color:var(--red);}
+  .cal-nav:disabled{opacity:.3; cursor:not-allowed;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+  .cal-dow{margin-bottom:8px;}
+  .cal-dowc{text-align:center; font-size:11px; font-weight:800; letter-spacing:.04em; color:var(--muted); text-transform:uppercase;}
+  .cal-day{aspect-ratio:1; border:1.5px solid transparent; background:var(--white); border-radius:3px; cursor:pointer;
+    font-family:inherit; font-size:15px; font-weight:600; color:var(--ink); display:flex; align-items:center; justify-content:center;}
+  .cal-day:hover:not(:disabled){border-color:var(--red); color:var(--red);}
+  .cal-day:disabled{color:#d2d2d3; cursor:not-allowed;}
+  .cal-day.sel{background:var(--red); color:#fff; border-color:var(--red);}
+  .cal-empty{aspect-ratio:1;}
+
+  .toggle-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  .chip{padding:11px 16px; border:1.5px solid var(--line-2); background:var(--white); border-radius:999px;
+    font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; color:var(--ink);}
+  .chip[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
+
+  .info-box{margin-top:26px; background:var(--white); border:1.5px solid var(--line); border-left:3px solid var(--red); border-radius:3px; padding:22px 24px;}
+  .info-box ul{list-style:none; display:grid; gap:12px;}
+  .info-box li{display:flex; gap:12px; font-size:15px;}
+  .info-box li .sq{width:8px; height:8px; background:var(--red); margin-top:7px; flex:none;}
+  .info-note{margin-top:16px; font-size:13.5px; color:var(--muted);}
+
+  .summary{margin-top:26px; background:var(--white); border:1.5px solid var(--line); border-radius:3px; overflow:hidden;}
+  .summary .row{display:flex; justify-content:space-between; gap:16px; padding:15px 22px; border-bottom:1px solid var(--line); font-size:15px;}
+  .summary .row:last-child{border-bottom:none;}
+  .summary .row .k{color:var(--muted); font-weight:600;}
+  .summary .row .v{font-weight:700; text-align:right;}
+  .reassure{display:flex; gap:12px; margin-top:20px; padding:16px 20px; background:var(--tint); border-radius:3px; font-size:14px;}
+  .reassure .sq{width:9px;height:9px;background:var(--red);margin-top:5px;flex:none;}
+
+  .footer{display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 28px; border-top:1px solid var(--line); background:var(--white); flex:none;}
+  .btn{font-family:inherit; font-weight:700; font-size:16px; cursor:pointer; border-radius:3px;
+    padding:15px 30px; border:1.5px solid transparent; letter-spacing:.01em; display:inline-flex; align-items:center; gap:10px;}
+  .btn-primary{background:var(--red); color:#fff;}
+  .btn-primary:hover{background:var(--red-dark);}
+  .btn-primary:disabled{background:var(--line-2); color:#fff; cursor:not-allowed;}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:transparent; padding-left:6px;}
+  .btn-ghost:hover{color:var(--red);}
+  .btn-ghost:disabled{opacity:0; pointer-events:none;}
+  .hint{font-size:12px; color:var(--muted); margin-left:12px;}
+  .hint b{color:var(--ink);}
+  @media(max-width:560px){
+    .hint{display:none;}
+    .btn{padding:14px 22px; font-size:15px;}
+    .topbar,.footer,.steps{padding-left:18px; padding-right:18px;}
+    .stage{padding:24px 18px;}
+  }
 </style>
-<style id='wp-emoji-styles-inline-css' type='text/css'>
 
-	img.wp-smiley, img.emoji {
-		display: inline !important;
-		border: none !important;
-		box-shadow: none !important;
-		height: 1em !important;
-		width: 1em !important;
-		margin: 0 0.07em !important;
-		vertical-align: -0.1em !important;
-		background: none !important;
-		padding: 0 !important;
-	}
-/*# sourceURL=wp-emoji-styles-inline-css */
-</style>
-<link rel='stylesheet' id='wp-block-library-css' href='../wp-includes/css/dist/block-library/style.minb34e.css?ver=6.9.4' type='text/css' media='all' />
+<div class="app">
+  <div class="topbar">
+    <div class="logo"><span class="mark"></span><b>HELI</b>&#8202;<span>FLIGHTS</span></div>
+    <div class="step-count" id="stepCount"></div>
+  </div>
+  <div class="steps" id="stepsBar"></div>
+  <div class="stage" id="stage"></div>
+  <div class="footer">
+    <button class="btn btn-ghost" id="backBtn">← Terug</button>
+    <div style="display:flex; align-items:center;">
+      <button class="btn btn-primary" id="nextBtn">Volgende</button>
+      <span class="hint" id="hint"><b>Enter ↵</b></span>
+    </div>
+  </div>
+</div>
 
-<link rel='stylesheet' id='wc-blocks-style-css' href='../wp-content/plugins/woocommerce/assets/client/blocks/wc-blockse1ef.css?ver=wc-10.5.1' type='text/css' media='all' />
-<style id='global-styles-inline-css' type='text/css'>
-:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--inter: "Inter", sans-serif;--wp--preset--font-family--cardo: Cardo;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 1300px;--wp--style--global--wide-size: 1300px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-cardo-font-family{font-family: var(--wp--preset--font-family--cardo) !important;}
-/*# sourceURL=global-styles-inline-css */
-</style>
+<script>
+const state = {
+  vertrek:null, route:null, duur:null, personen:2, datum:'', flexibel:false,
+  extras:[], gelegenheid:null, voornaam:'', achternaam:'', email:'', tel:''
+};
 
-<link rel='stylesheet' id='woocommerce-layout-css' href='../wp-content/plugins/woocommerce/assets/css/woocommerce-layout03b1.css?ver=10.5.1' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css' href='../wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen03b1.css?ver=10.5.1' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css' href='../wp-content/plugins/woocommerce/assets/css/woocommerce03b1.css?ver=10.5.1' type='text/css' media='all' />
-<style id='woocommerce-inline-inline-css' type='text/css'>
-.woocommerce form .form-row .required { visibility: visible; }
-/*# sourceURL=woocommerce-inline-inline-css */
-</style>
-<link rel='stylesheet' id='weglot-css-css' href='../wp-content/plugins/weglot/dist/css/front-cssde54.css?ver=5.3' type='text/css' media='all' />
-<link rel='stylesheet' id='new-flag-css-css' href='../wp-content/plugins/weglot/dist/css/new-flagsde54.css?ver=5.3' type='text/css' media='all' />
-<link rel='stylesheet' id='font-awesome-css' href='../wp-content/themes/salient/css/font-awesome-legacy.min6996.css?ver=4.7.1' type='text/css' media='all' />
-<link rel='stylesheet' id='salient-grid-system-css' href='../wp-content/themes/salient/css/build/grid-systemf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='main-styles-css' href='../wp-content/themes/salient/css/build/stylef411.css?ver=18.0.2' type='text/css' media='all' />
-<style id='main-styles-inline-css' type='text/css'>
-html body[data-header-resize="1"] .container-wrap,
-			html body[data-header-format="left-header"][data-header-resize="0"] .container-wrap,
-			html body[data-header-resize="0"] .container-wrap,
-			body[data-header-format="left-header"][data-header-resize="0"] .container-wrap {
-				padding-top: 0;
-			}
-			.main-content > .row > #breadcrumbs.yoast {
-				padding: 20px 0;
-			}
-/*# sourceURL=main-styles-inline-css */
-</style>
-<link rel='stylesheet' id='nectar-header-layout-centered-menu-css' href='../wp-content/themes/salient/css/build/header/header-layout-centered-menuf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-header-megamenu-css' href='../wp-content/themes/salient/css/build/header/header-megamenuf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-header-perma-transparent-css' href='../wp-content/themes/salient/css/build/header/header-perma-transparentf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-element-wpb-column-border-css' href='../wp-content/themes/salient/css/build/elements/element-wpb-column-borderf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-wpforms-css' href='../wp-content/themes/salient/css/build/third-party/wpformsf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-brands-css' href='../wp-content/themes/salient/css/nectar-brandsf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar_default_font_open_sans-css' href='https://fonts.googleapis.com/css?family=Open+Sans%3A300%2C400%2C600%2C700&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
-<link rel='stylesheet' id='fullpage-css' href='../wp-content/themes/salient/css/build/plugins/fullpagef411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='responsive-css' href='../wp-content/themes/salient/css/build/responsivef411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-product-style-minimal-css' href='../wp-content/themes/salient/css/build/third-party/woocommerce/product-style-minimalf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-css' href='../wp-content/themes/salient/css/build/woocommercef411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='skin-material-css' href='../wp-content/themes/salient/css/build/skin-materialf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='salient-wp-menu-dynamic-css' href='../wp-content/uploads/salient/menu-dynamic13a6.css?ver=62209' type='text/css' media='all' />
-<link rel='stylesheet' id='mollie-applepaydirect-css' href='../wp-content/plugins/mollie-payments-for-woocommerce/public/css/mollie-applepaydirect.min0939.css?ver=1776872207' type='text/css' media='screen' />
-<link rel='stylesheet' id='js_composer_front-css' href='../wp-content/themes/salient/css/build/plugins/js_composerf411.css?ver=18.0.2' type='text/css' media='all' />
-<link rel='stylesheet' id='dynamic-css-css' href='../wp-content/uploads/salient/salient-dynamic-stylesa9b7.css?ver=51666' type='text/css' media='all' />
-<style id='dynamic-css-inline-css' type='text/css'>
-body,html{overflow:hidden;height:100%;}.no-rgba #header-space{display:none;}@media only screen and (max-width:999px){body #header-space[data-header-mobile-fixed="1"]{display:none;}#header-outer[data-mobile-fixed="false"]{position:absolute;}}@media only screen and (max-width:999px){body:not(.nectar-no-flex-height) #header-space[data-secondary-header-display="full"]:not([data-header-mobile-fixed="false"]){display:block!important;margin-bottom:-66px;}#header-space[data-secondary-header-display="full"][data-header-mobile-fixed="false"]{display:none;}}@media only screen and (min-width:1000px){#header-space{display:none;}.nectar-slider-wrap.first-section,.parallax_slider_outer.first-section,.full-width-content.first-section,.parallax_slider_outer.first-section .swiper-slide .content,.nectar-slider-wrap.first-section .swiper-slide .content,#page-header-bg,.nder-page-header,#page-header-wrap,.full-width-section.first-section{margin-top:0!important;}body #page-header-bg,body #page-header-wrap{height:124px;}body #search-outer{z-index:100000;}}@media only screen and (min-width:1000px){#page-header-wrap.fullscreen-header,#page-header-wrap.fullscreen-header #page-header-bg,html:not(.nectar-box-roll-loaded) .nectar-box-roll > #page-header-bg.fullscreen-header,.nectar_fullscreen_zoom_recent_projects,#nectar_fullscreen_rows:not(.afterLoaded) > div,#nectar_fullscreen_rows:not(.afterLoaded) > section{height:100vh;}.wpb_row.vc_row-o-full-height.top-level,.wpb_row.vc_row-o-full-height.top-level > .col.span_12{min-height:100vh;}#page-header-bg[data-alignment-v="middle"] .span_6 .inner-wrap,#page-header-bg[data-alignment-v="top"] .span_6 .inner-wrap,.blog-archive-header.color-bg .container{padding-top:calc(117px + var(--nectar_hook_before_nav_content_height,0px));}#page-header-wrap.container #page-header-bg .span_6 .inner-wrap{padding-top:0;}.nectar-slider-wrap[data-fullscreen="true"]:not(.loaded),.nectar-slider-wrap[data-fullscreen="true"]:not(.loaded) .swiper-container{height:calc(100vh + 2px)!important;}.admin-bar .nectar-slider-wrap[data-fullscreen="true"]:not(.loaded),.admin-bar .nectar-slider-wrap[data-fullscreen="true"]:not(.loaded) .swiper-container{height:calc(100vh - 30px)!important;}}@media only screen and (max-width:999px){#page-header-bg[data-alignment-v="middle"]:not(.fullscreen-header) .span_6 .inner-wrap,#page-header-bg[data-alignment-v="top"] .span_6 .inner-wrap,.blog-archive-header.color-bg .container{padding-top:calc(70px + var(--nectar_hook_before_nav_content_height,0px));}.vc_row.top-level.full-width-section:not(.full-width-ns) > .span_12,#page-header-bg[data-alignment-v="bottom"] .span_6 .inner-wrap{padding-top:40px;}}@media only screen and (max-width:690px){.vc_row.top-level.full-width-section:not(.full-width-ns) > .span_12{padding-top:70px;}.vc_row.top-level.full-width-content .nectar-recent-posts-single_featured .recent-post-container > .inner-wrap{padding-top:40px;}}@media only screen and (max-width:999px){.full-width-ns .nectar-slider-wrap .swiper-slide[data-y-pos="middle"] .content,.full-width-ns .nectar-slider-wrap .swiper-slide[data-y-pos="top"] .content{padding-top:30px;}}@media only screen and (max-width:999px){.using-mobile-browser #nectar_fullscreen_rows:not(.afterLoaded):not([data-mobile-disable="on"]) > div{height:calc(100vh - 76px);}.using-mobile-browser .wpb_row.vc_row-o-full-height.top-level,.using-mobile-browser .wpb_row.vc_row-o-full-height.top-level > .col.span_12,[data-permanent-transparent="1"].using-mobile-browser .wpb_row.vc_row-o-full-height.top-level,[data-permanent-transparent="1"].using-mobile-browser .wpb_row.vc_row-o-full-height.top-level > .col.span_12{min-height:calc(100vh - 76px);}html:not(.nectar-box-roll-loaded) .nectar-box-roll > #page-header-bg.fullscreen-header,.nectar_fullscreen_zoom_recent_projects,.nectar-slider-wrap[data-fullscreen="true"]:not(.loaded),.nectar-slider-wrap[data-fullscreen="true"]:not(.loaded) .swiper-container,#nectar_fullscreen_rows:not(.afterLoaded):not([data-mobile-disable="on"]) > div{height:calc(100vh - 1px);}.wpb_row.vc_row-o-full-height.top-level,.wpb_row.vc_row-o-full-height.top-level > .col.span_12{min-height:calc(100vh - 1px);}[data-bg-header="true"][data-permanent-transparent="1"] #page-header-wrap.fullscreen-header,[data-bg-header="true"][data-permanent-transparent="1"] #page-header-wrap.fullscreen-header #page-header-bg,html:not(.nectar-box-roll-loaded) [data-bg-header="true"][data-permanent-transparent="1"] .nectar-box-roll > #page-header-bg.fullscreen-header,[data-bg-header="true"][data-permanent-transparent="1"] .nectar_fullscreen_zoom_recent_projects,[data-permanent-transparent="1"] .nectar-slider-wrap[data-fullscreen="true"]:not(.loaded),[data-permanent-transparent="1"] .nectar-slider-wrap[data-fullscreen="true"]:not(.loaded) .swiper-container{height:100vh;}[data-permanent-transparent="1"] .wpb_row.vc_row-o-full-height.top-level,[data-permanent-transparent="1"] .wpb_row.vc_row-o-full-height.top-level > .col.span_12{min-height:100vh;}body[data-transparent-header="false"] #ajax-content-wrap.no-scroll{min-height:calc(100vh - 1px);height:calc(100vh - 1px);}}#nectar_fullscreen_rows{background-color:transparent;}.post-type-archive-product.woocommerce .container-wrap,.tax-product_cat.woocommerce .container-wrap{background-color:#f6f6f6;}.woocommerce ul.products li.product.material,.woocommerce-page ul.products li.product.material{background-color:#ffffff;}.woocommerce ul.products li.product.minimal .product-wrap,.woocommerce ul.products li.product.minimal .background-color-expand,.woocommerce-page ul.products li.product.minimal .product-wrap,.woocommerce-page ul.products li.product.minimal .background-color-expand{background-color:#ffffff;}@media only screen,print{#ajax-content-wrap .height_desktop_1080px> .vc_column-inner,.height_desktop_1080px> .vc_column-inner{height:1080px;}}@media only screen and (max-width:690px){html body #ajax-content-wrap .height_phone_740px> .vc_column-inner,html body .height_phone_740px> .vc_column-inner{height:740px;}}.screen-reader-text,.nectar-skip-to-content:not(:focus){border:0;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute!important;width:1px;word-wrap:normal!important;}.row .col img:not([srcset]){width:auto;}.row .col img.img-with-animation.nectar-lazy:not([srcset]){width:100%;}
-/* Prev + Next button background */
-.flickity-button.flickity-prev-next-button.previous,
-.flickity-button.flickity-prev-next-button.next{
-  background:#8B0000 !important;
-  opacity:1 !important;
-  border:none !important;
-}
+// ── Waar de aanvraag naartoe gaat. Vul in met je CRM-webhook of Zapier catch-hook.
+//    Leeg = de aanvraag wordt in de console gelogd (voor testen).
+const SUBMIT_ENDPOINT = ''; // bv. 'https://crm.heli-flights.be/api/leads'
 
-/* Arrow icon kleur */
-.flickity-button.flickity-prev-next-button.previous .flickity-button-icon,
-.flickity-button.flickity-prev-next-button.next .flickity-button-icon{
-  fill:#ffffff !important;
-}
+const routeSets = {
+  antwerpen:[
+    {v:'skyline', b:'Skyline & Schelde', s:'Het Steen · kathedraal · MAS · Havenhuis'},
+    {v:'haven', b:'Haven & Forten', s:'De haven · de dokken · de fortengordel'},
+  ],
+  kust:[
+    {v:'kustlijn', b:'Kustlijn Knokke–Oostende', s:'Zwin · Knokke · Blankenberge · Zeebrugge'},
+    {v:'brugge', b:'Brugge & Zwin', s:'Historisch Brugge · het Zwin · de duinen'},
+  ],
+  eigen:[]
+};
 
-/* Hover consistent */
-.flickity-button.flickity-prev-next-button.previous:hover,
-.flickity-button.flickity-prev-next-button.next:hover{
-  background:#8B0000 !important;
-}
-.flickity-button.flickity-prev-next-button.previous:before,
-.flickity-button.flickity-prev-next-button.next:before{
-  background:#8B0000 !important;
-}
-/* Force arrow path fill */
-.flickity-prev-next-button .flickity-button-icon,
-.flickity-prev-next-button .flickity-button-icon path,
-.flickity-prev-next-button .flickity-button-icon .arrow{
-  fill:#fff !important;
-  stroke:#fff !important;
-}
-
-/* Als theme 'color' gebruikt (soms bij currentColor) */
-.flickity-prev-next-button{
-  color:#fff !important;
-}
-.flickity-prev-next-button .flickity-button-icon{
-  filter:none !important;
-}
-/* Alles binnen de arrow wit forceren */
-.flickity-prev-next-button .flickity-button-icon *{
-  fill:#fff !important;
-  stroke:#fff !important;
-}
-
-/* Voor icons die currentColor gebruiken */
-.flickity-prev-next-button{
-  color:#fff !important;
-}
-
-/* Soms staat er expliciet stroke-width of opacity die stoort */
-.flickity-prev-next-button .flickity-button-icon *{
-  opacity:1 !important;
-}
-.flickity-prev-next-button:before,
-.flickity-prev-next-button:after{
-  background:#fff !important;
-  color:#fff !important;
-  border-color:#fff !important;
-}
-
-
-.single-product .product.type-product.product-type-variable p.price,
-.single-product .product.type-product.product-type-variable p.price.price.nectar-inherit-h5,
-.single-product .product.type-product.product-type-variable p.price.nectar-inherit-default {
-  display: none !important;
-}
-
-
-/* ================================
-   Woo Short Description – USP grid
-   ================================ */
-
-.woocommerce-product-details__short-description .hf-usp-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 24px;
-  margin: 14px 0 6px;
-  padding: 0;
-}
-
-.woocommerce-product-details__short-description .hf-usp-item{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  line-height: 1.25;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-}
-
-/* Circle container for Nectar icons */
-.woocommerce-product-details__short-description .hf-usp-item .icon-default-style{
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  background: rgba(255,255,255,.55);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Bigger + red icons */
-.woocommerce-product-details__short-description .hf-usp-item .icon-default-style i,
-.woocommerce-product-details__short-description .hf-usp-item i{
-  font-size: 20px !important;
-  line-height: 1 !important;
-  color: #7a0000 !important;
-}
-
-.woocommerce-product-details__short-description .hf-usp-item .hf-usp-text{
-  margin: 0;
-  padding: 0;
-  color: rgba(0,0,0,.85);
-}
-
-.woocommerce-product-details__short-description .hf-usp-grid p{
-  margin: 0;
-}
-
-/* Mobile: keep 2 columns, tighter spacing */
-@media (max-width: 520px){
-  .woocommerce-product-details__short-description .hf-usp-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 16px;
+function buildSteps(){
+  const s = [];
+  s.push({id:'vertrek', type:'single', label:'Vertrek', q:'Vanwaar wil je <span class="imp">vertrekken</span>?',
+    help:'Kies de dichtstbijzijnde basis, of vertrek vanaf je eigen locatie.',
+    options:[
+      {v:'antwerpen', b:'Regio Antwerpen', s:'Ranst · Nijlen · Lier · Ravels'},
+      {v:'kust', b:'Regio Kust', s:'Zeebrugge · Knokke'},
+      {v:'eigen', b:'Eigen locatie', s:'Pickup & dropoff op maat'},
+    ]});
+  if(state.vertrek==='eigen'){
+    s.push({id:'voorwaarden', type:'info', label:'Eigen locatie', q:'Even dit over je <span class="imp">eigen locatie</span>',
+      help:'Vertrek of landing op je eigen terrein kan, als het aan deze voorwaarden voldoet:',
+      items:[
+        'Een vrij terrein van minstens 30 × 15 meter',
+        'Een obstakelvrije aan- en uitvliegroute (geen hoge bomen, kabels of masten)',
+        'Een vaste, egale ondergrond zonder los materiaal',
+        'Schriftelijke toelating van de eigenaar of huurder',
+      ],
+      note:'Goed om te weten: de vliegtijd van en naar je locatie (vanaf onze basis) telt mee in de totale vluchttijd.'});
   }
-  .woocommerce-product-details__short-description .hf-usp-item{
-    font-size: 13px;
-    gap: 10px;
+  const rs = state.vertrek ? routeSets[state.vertrek].slice() : [];
+  const routeOpts = rs.concat([
+    {v:'zelf', b:'Ik stippel zelf uit', s:'Over je huis, je bedrijf, of een plek die iets betekent'},
+    {v:'advies', b:'Laat ons adviseren', s:'We stellen samen de mooiste route voor'},
+  ]);
+  s.push({id:'route', type:'single', label:'Route', q:'Welke <span class="imp">route</span> wil je vliegen?',
+    help: state.vertrek==='eigen' ? 'Bepaal vrij je route binnen de toegelaten luchtruimtes.' : 'Kies een uitgewerkte klassieker, of stippel je eigen route uit.',
+    options: routeOpts});
+  s.push({id:'duur', type:'single', label:'Duur', q:'Hoe lang wil je <span class="imp">in de lucht</span>?',
+    help:'Elke privévlucht duurt minstens 30 minuten. Een langere, volledig eigen route stippelen we samen uit.',
+    options:[
+      {v:'30', b:'30 minuten', s:'De klassieke rondvlucht'},
+      {v:'45', b:'45 minuten', s:'Wat meer tijd boven de mooiste plekken'},
+      {v:'60', b:'60 minuten', s:'Uitgebreid, alle tijd'},
+      {v:'langer', b:'Langer / op maat', s:'We bespreken je volledige route'},
+    ]});
+  s.push({id:'personen', type:'stepper', label:'Gezelschap', q:'Met hoeveel <span class="imp">personen</span> vliegen jullie?',
+    help:'Je boekt de hele helikopter — lege plaatsen tellen mee. Na de reservatie bevestigen we het exacte gewicht.'});
+  s.push({id:'wanneer', type:'date', label:'Datum', q:'Wanneer wil je <span class="imp">vliegen</span>?',
+    help:'Kies je voorkeursdatum. Definitief tijdstip en go/no-go stemmen we af met de beschikbaarheid.'});
+  s.push({id:'extras', type:'multi', label:'Extra’s', q:'Wil je er iets <span class="imp">speciaals</span> van maken?',
+    help:'Optioneel. Onze troef: we verzorgen dit ook op locatie.',
+    options:[
+      {v:'champagne', b:'Champagne op locatie', s:'Een toast op de grond, voor of na de vlucht'},
+      {v:'gopro', b:'GoPro aan boord', s:'Legt de volledige vlucht vast — neemt geen plaats in'},
+      {v:'cameraman', b:'Professionele cameraman', s:'Cinematische beelden (neemt één plaats in)'},
+      {v:'reportage', b:'Fotoreportage op locatie', s:'Aankomst, landing en het moment op de grond'},
+      {v:'certificaat', b:'Vluchtcertificaat & souvenir', s:'Als aandenken aan de vlucht'},
+    ]});
+  s.push({id:'gelegenheid', type:'single', optional:true, label:'Gelegenheid', q:'Voor welke <span class="imp">gelegenheid</span>?',
+    help:'Optioneel — helpt ons je vlucht persoonlijker te maken.',
+    options:[
+      {v:'cadeau', b:'Een cadeau', s:''},
+      {v:'romantisch', b:'Romantisch moment', s:''},
+      {v:'familie', b:'Familie & vrienden', s:''},
+      {v:'zakelijk', b:'Zakelijk / VIP', s:''},
+      {v:'droom', b:'Gewoon een droom', s:''},
+    ]});
+  s.push({id:'contact', type:'form', label:'Jouw gegevens', q:'Waar sturen we je <span class="imp">voorstel</span> naartoe?',
+    help:'We bekijken de beschikbaarheid en bezorgen je een voorstel op maat — inclusief prijs.'});
+  s.push({id:'bevestig', type:'summary', label:'Overzicht', q:'Klaar om <span class="imp">aan te vragen</span>?',
+    help:'Check even je keuzes. Je zit nog nergens aan vast.'});
+  return s;
+}
+
+let steps = buildSteps();
+let i = 0;
+let calMonth, calYear;
+
+const stage = document.getElementById('stage');
+const stepsBar = document.getElementById('stepsBar');
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const stepCount = document.getElementById('stepCount');
+const hint = document.getElementById('hint');
+
+const tickSVG = '<svg class="tick" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11.5l4.5 4.5L18 6" stroke="#AD0404" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function esc(s){return (s||'').replace(/</g,'&lt;');}
+
+const MONTHS=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const DOW=['ma','di','wo','do','vr','za','zo'];
+
+function initCal(){
+  const t=new Date();
+  if(state.datum){ const d=new Date(state.datum+'T00:00'); calYear=d.getFullYear(); calMonth=d.getMonth(); }
+  else { calYear=t.getFullYear(); calMonth=t.getMonth(); }
+}
+function drawCal(){
+  const wrap=document.getElementById('calWrap'); if(!wrap) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const first=new Date(calYear,calMonth,1);
+  const start=(first.getDay()+6)%7;           // Monday-first
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const atCurrent=(calYear===today.getFullYear() && calMonth===today.getMonth());
+  let h=`<div class="cal">
+    <div class="cal-head">
+      <button class="cal-nav" id="calPrev" ${atCurrent?'disabled':''} aria-label="vorige maand">‹</button>
+      <div class="cal-title">${MONTHS[calMonth]} ${calYear}</div>
+      <button class="cal-nav" id="calNext" aria-label="volgende maand">›</button>
+    </div>
+    <div class="cal-grid cal-dow">`;
+  DOW.forEach(d=>h+=`<span class="cal-dowc">${d}</span>`);
+  h+=`</div><div class="cal-grid">`;
+  for(let b=0;b<start;b++) h+=`<span class="cal-empty"></span>`;
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(calYear,calMonth,d);
+    const iso=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const past=dt<today;
+    const sel=state.datum===iso;
+    h+=`<button class="cal-day${sel?' sel':''}" ${past?'disabled':''} data-iso="${iso}">${d}</button>`;
   }
-  .woocommerce-product-details__short-description .hf-usp-item .icon-default-style{
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-  }
-  .woocommerce-product-details__short-description .hf-usp-item .icon-default-style i{
-    font-size: 19px !important;
-  }
-}
-
-/* Ultra small phones: optional fallback to 1 column (zet dit uit als je NOOIT 1 kolom wil) */
-@media (max-width: 360px){
-  .woocommerce-product-details__short-description .hf-usp-grid{
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Minder ruimte onder de product summary */
-.single-product div.product {
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Minder ruimte onder add-to-cart/summary kolom */
-.single-product .summary {
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Minder ruimte vóór de volgende sectie (tabs/related/upsells) */
-.single-product .woocommerce-tabs {
-  margin-top: 20px !important;
-  padding-top: 0 !important;
-}
-
-.single-product .product_meta .posted_in{
-  display:none !important;
-}
-
-/* ================================
-   Heli-Flights – Gift fields styling
-   Targets the custom wrapper: #hf-gift-fields
-   Make full-width, compact, clean
-=================================== */
-
-/* Wrapper */
-#hf-gift-fields{
-  width:100%;
-  margin: 14px 0 8px !important;
-}
-
-/* Title + subtitle (if you keep them) */
-#hf-gift-fields .hf-title{
-  font-weight:700;
-  margin: 0 0 6px;
-}
-#hf-gift-fields .hf-sub{
-  opacity:.85;
-  margin: 0 0 10px;
-}
-
-/* The “set” card becomes full width + compact */
-#hf-gift-fields .hf-gift-set{
-  width:100%;
-  padding: 12px 12px 10px !important;
-  border: 1px solid rgba(0,0,0,.08);
-  border-radius: 14px;
-  background: rgba(255,255,255,.35);
-  margin: 0 0 10px !important;
-  box-sizing:border-box;
-}
-
-/* Make Woo fields full width (Salient/WC sometimes halves them) */
-#hf-gift-fields .form-row,
-#hf-gift-fields .form-row-first,
-#hf-gift-fields .form-row-last{
-  width:100% !important;
-  float:none !important;
-  clear:both !important;
-  margin: 0 0 10px !important;
-}
-
-/* Labels: smaller + normal case */
-#hf-gift-fields label{
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  letter-spacing: .02em;
-  margin-bottom: 6px !important;
-  text-transform:none !important;
-}
-
-/* Inputs: compact height + consistent */
-#hf-gift-fields input[type="text"]{
-  width:100% !important;
-  height: 42px !important;
-  padding: 10px 12px !important;
-  border-radius: 10px !important;
-  box-sizing:border-box;
-}
-
-/* Textarea: compact, not huge */
-#hf-gift-fields textarea{
-  width:100% !important;
-  min-height: 80px !important;
-  max-height: 120px !important;
-  padding: 10px 12px !important;
-  border-radius: 10px !important;
-  box-sizing:border-box;
-  resize: vertical;
-}
-
-/* Reduce weird extra spacing some themes add */
-#hf-gift-fields p,
-#hf-gift-fields br{
-  margin:0 !important;
-}
-
-
-/* Mobile: slightly tighter */
-@media (max-width: 690px){
-  #hf-gift-fields{ margin: 12px 0 6px !important; }
-  #hf-gift-fields .hf-gift-set{ padding: 11px 11px 9px !important; border-radius: 16px; }
-  #hf-gift-fields label{ font-size: 12px !important; }
-  #hf-gift-fields input[type="text"]{ height: 40px !important; }
-  #hf-gift-fields textarea{ min-height: 74px !important; }
-}
-
-/* ===== Heli-Flights: Mobile Sticky "Geef cadeau" (UI-only) ===== */
-
-/* Sticky bar wrapper */
-.hf-sticky-atc{
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99999;
-  padding: 12px 14px;
-  background: #fff;
-  border-top: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 -6px 18px rgba(0,0,0,.08);
-  display: none; /* toggled by JS */
-}
-
-/* Layout */
-.hf-sticky-atc__inner{
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-/* The sticky button – visual styles are copied from original button via JS */
-.hf-sticky-atc__btn{
-  width: 100%;
-  height: 44px;
-  border: 0;
-  cursor: pointer;
-}
-
-/* Prevent content hidden behind the sticky bar */
-body.hf-has-sticky-atc{
-  padding-bottom: 74px;
-}
-
-/* Desktop: always off */
-@media (min-width: 768px){
-  .hf-sticky-atc{ display: none !important; }
-  body.hf-has-sticky-atc{ padding-bottom: 0; }
-}
-
-/* Jump highlight on target element */
-.hf-jump-highlight{
-  outline: 2px solid #d63638;
-  outline-offset: 3px;
-  border-radius: 10px;
-  animation: hfPulse .9s ease-in-out 1;
-}
-@keyframes hfPulse{
-  0%{ transform: scale(1); }
-  35%{ transform: scale(1.01); }
-  100%{ transform: scale(1); }
-}
-
-/* =========================================
-   CFVSW: Vliegerklasse = grote tekst-cards
-   Classes: cfvsw-swatches-container, cfvsw-product-container
-   Attribute: attribute_vliegerklasse
-   ========================================= */
-
-/* 1) Zet de swatches onder elkaar (1 kolom) */
-[data-attribute_name="attribute_vliegerklasse"] .cfvsw-swatches-container,
-[data-attribute_name="attribute_vliegerklasse"] .cfvsw-product-container {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 14px !important;
-}
-
-/* 2) Maak elke swatch een grote card */
-[data-attribute_name="attribute_vliegerklasse"] .cfvsw-product-container .cfvsw-swatches-container > * {
-  width: 360px !important;
-  max-width: 100% !important;
-  min-height: 86px !important;
-  height: auto !important;
-  padding: 18px 16px !important;
-  border-radius: 18px !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-
-  white-space: normal !important;
-}
-
-/* 3) Zorg dat de tekst wrapt (veel CFVSW gebruikt spans binnenin) */
-[data-attribute_name="attribute_vliegerklasse"] .cfvsw-product-container .cfvsw-swatches-container * {
-  white-space: normal !important;
-  line-height: 1.25 !important;
-}
-
-/* 4) Mobile: full width */
-@media (max-width: 767px){
-  [data-attribute_name="attribute_vliegerklasse"] .cfvsw-product-container .cfvsw-swatches-container > * {
-    width: 100% !important;
-    min-height: 82px !important;
-  }
-}
-
-/* =========================================
-   CFVSW — Vliegerklasse: 2x2 grid (desktop + mobile)
-   Target: swatches-attr="attribute_vliegerklasse"
-   ========================================= */
-
-/* Container = 2 kolommen */
-.cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"]{
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 12px !important;
-  align-items: stretch !important;
-}
-
-/* Each option = compact card */
-.cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"] .cfvsw-swatches-option{
-  min-width: 0 !important;         /* override inline min-width:160px */
-  width: 100% !important;
-  min-height: 0 !important;        /* override inline min-height:160px */
-  height: auto !important;
-
-  padding: 12px 10px !important;
-  border-radius: 16px !important;  /* override inline 30px if you want */
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-}
-
-/* Text: wrap + compact */
-.cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"] .cfvsw-swatch-inner{
-  white-space: normal !important;
-  line-height: 1.2 !important;
-  font-size: 13px !important;
-}
-
-/* Desktop: iets groter en mooier */
-@media (min-width: 992px){
-  .cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"]{
-    gap: 14px !important;
-  }
-  .cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"] .cfvsw-swatches-option{
-    padding: 14px 12px !important;
-    border-radius: 18px !important;
-  }
-  .cfvsw-swatches-container[swatches-attr="attribute_vliegerklasse"] .cfvsw-swatch-inner{
-      
- .dienst-naam{
-  position: absolute; /* of relative, maar meestal is dit een overlay */
-  top: 16px;
-  left: 16px;
-  z-index: 999999; /* hoger dan alles in de card */
-}
-
-@media (max-width: 999px){
-
-  .nectar-fancy-box[data-style="hover_desc"]{ overflow:hidden; }
-
-  /* inner als positioning context */
-  .nectar-fancy-box[data-style="hover_desc"] .inner{
-    position: absolute !important;
-    inset: 0 !important;
-    z-index: 5;
-    padding: 18px !important;
-  }
-
-  /* CLOSED: alleen heading onderaan */
-  .nectar-fancy-box[data-style="hover_desc"] .heading-wrap{
-    position: absolute !important;
-    left: 18px !important;
-    right: 18px !important;
-    bottom: 18px !important;
-    z-index: 9 !important;
-    transform: none !important;
-    transition: bottom .25s ease !important;
-  }
-
-  /* hover-content standaard verborgen */
-  .nectar-fancy-box[data-style="hover_desc"] .hover-content{
-    position: absolute !important;
-    left: 18px !important;
-    right: 18px !important;
-    bottom: 18px !important;
-    z-index: 9 !important;
-
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transform: translateY(10px) !important;
-    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
-    line-height: 1.25 !important;
-  }
-
-  /* OPEN: hover-content zichtbaar + heading schuift omhoog met vaste gap */
-  .nectar-fancy-box[data-style="hover_desc"].hf-inview .hover-content,
-  .nectar-fancy-box[data-style="hover_desc"].hovered .hover-content{
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-  }
-
-  /* 64px is veilig voor icon+1 regel titel. Pas dit aan indien nodig. */
-  .nectar-fancy-box[data-style="hover_desc"].hf-inview .heading-wrap,
-  .nectar-fancy-box[data-style="hover_desc"].hovered .heading-wrap{
-    bottom: calc(18px + 64px) !important;  /* title omhoog */
-  }
-
-  /* Gradient alleen open */
-  .nectar-fancy-box[data-style="hover_desc"] .inner:before{ content:none !important; }
-  .nectar-fancy-box[data-style="hover_desc"].hf-inview .inner:before,
-  .nectar-fancy-box[data-style="hover_desc"].hovered .inner:before{
-    content:"";
-    position:absolute;
-    inset:0;
-    z-index:4;
-    background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 60%);
-    pointer-events:none;
-  }
-}
-
- .wg-portal {
-    position: fixed !important;
-    z-index: 2147483647 !important;
-    background: rgba(10,10,10,0.97) !important;
-    border: 1px solid rgba(139,0,0,0.6) !important;
-    border-radius: 8px !important;
-    min-width: 130px !important;
-    padding: 4px 0 !important;
-    margin: 0 !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
-    list-style: none !important;
-    pointer-events: all !important;
-  }
-/*# sourceURL=dynamic-css-inline-css */
-</style>
-<link rel='stylesheet' id='redux-google-fonts-salient_redux-css' href='https://fonts.googleapis.com/css?family=Bodoni+Moda%3A500%2C400%7CInter%3A300%2C400%2C500%2C400italic%2C600%7CPlus+Jakarta+Sans%3A700%2C400%7CCrimson+Text%3A400&amp;subset=latin&amp;ver=6.9.4' type='text/css' media='all' />
-<script type="text/javascript" src="../wp-includes/js/jquery/jquery.minf43b.js?ver=3.7.1" id="jquery-core-js"></script>
-<script type="text/javascript" src="../wp-includes/js/jquery/jquery-migrate.min5589.js?ver=3.4.1" id="jquery-migrate-js"></script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.minca57.js?ver=2.7.0-wc.10.5.1" id="wc-jquery-blockui-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" id="wc-add-to-cart-js-extra">
-/* <![CDATA[ */
-var wc_add_to_cart_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/?wc-ajax=%%endpoint%%","i18n_view_cart":"View cart","cart_url":"https://heli-flights.be/cart/","is_cart":"","cart_redirect_after_add":"no"};
-//# sourceURL=wc-add-to-cart-js-extra
-/* ]]> */
-</script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min03b1.js?ver=10.5.1" id="wc-add-to-cart-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min6bec.js?ver=2.1.4-wc.10.5.1" id="wc-js-cookie-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" id="woocommerce-js-extra">
-/* <![CDATA[ */
-var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/?wc-ajax=%%endpoint%%","i18n_password_show":"Show password","i18n_password_hide":"Hide password"};
-//# sourceURL=woocommerce-js-extra
-/* ]]> */
-</script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min03b1.js?ver=10.5.1" id="woocommerce-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" src="../wp-content/plugins/weglot/dist/front-jsde54.js?ver=5.3" id="wp-weglot-js-js"></script>
-<script type="text/javascript" id="WCPAY_ASSETS-js-extra">
-/* <![CDATA[ */
-var wcpayAssets = {"url":"https://heli-flights.be/wp-content/plugins/woocommerce-payments/dist/"};
-//# sourceURL=WCPAY_ASSETS-js-extra
-/* ]]> */
-</script>
-<script></script><link rel="https://api.w.org/" href="../wp-json/index.html" /><link rel="alternate" title="JSON" type="application/json" href="../wp-json/wp/v2/pages/342.json" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
-<meta name="generator" content="WordPress 6.9.4" />
-<meta name="generator" content="WooCommerce 10.5.1" />
-<link rel="canonical" href="index.html" />
-<link rel='shortlink' href='../indexc2ef.html?p=342' />
-		<script type="text/javascript">
-			(function(c, l, a, r, i, t, y) {
-				c[a] = c[a] || function() {
-					(c[a].q = c[a].q || []).push(arguments)
-				};
-				t = l.createElement(r);
-				t.async = 1;
-				t.src = "https://www.clarity.ms/tag/" + i + "?ref=wordpress";
-				y = l.getElementsByTagName(r)[0];
-				y.parentNode.insertBefore(t, y);
-			})(window, document, "clarity", "script", "wgh1gwqmb8");
-		</script>
-	<meta name="ti-site-data" content="eyJyIjoiMTowITc6MCEzMDoxIiwibyI6Imh0dHBzOlwvXC9oZWxpLWZsaWdodHMuYmVcL3dwLWFkbWluXC9hZG1pbi1hamF4LnBocD9hY3Rpb249dGlfb25saW5lX3VzZXJzX2dvb2dsZSZhbXA7cD0lMkZwcml2ZS1yb25kdmx1Y2h0LWFhbnZyYWFnJTJGJmFtcDtfd3Bub25jZT1jOWZjMTU1YTJiIn0=" />
-<link rel="alternate" href="index.html" hreflang="nl"/>
-<link rel="alternate" href="../en/prive-rondvlucht-aanvraag/index.html" hreflang="en"/>
-<script type="application/json" id="weglot-data">{"website":"http:\/\/heli-flights.local","uid":"5291e866c2","project_slug":"p-5291e866c2","language_from":"nl","language_from_custom_flag":null,"language_from_custom_name":null,"excluded_paths":[],"excluded_blocks":[],"custom_settings":{"button_style":{"is_dropdown":true,"with_flags":true,"flag_type":"circle","with_name":true,"custom_css":"","full_name":false},"wp_user_version":"5.3","translate_email":false,"translate_search":false,"translate_amp":false,"switchers":[{"templates":{"name":"default","hash":"cce4ff11c363cb04c771312b7262a91cd3aee9bc"},"location":[],"style":{"with_flags":true,"flag_type":"circle","with_name":true,"full_name":false,"is_dropdown":true}}],"definitions":[]},"pending_translation_enabled":false,"curl_ssl_check_enabled":true,"custom_css":null,"languages":[{"language_to":"en","custom_code":null,"custom_name":null,"custom_local_name":null,"provider":null,"enabled":true,"automatic_translation_enabled":true,"deleted_at":null,"connect_host_destination":null,"custom_flag":null}],"organization_slug":"w-a4fbd8e850","api_domain":"cdn-api-weglot.com","api_base_url":"https:\/\/cdn-api-weglot.com","product":"1.0","current_language":"nl","switcher_links":{"nl":"https:\/\/heli-flights.be\/prive-rondvlucht-aanvraag\/","en":"https:\/\/heli-flights.be\/en\/prive-rondvlucht-aanvraag\/"},"original_path":"\/prive-rondvlucht-aanvraag\/"}</script><script type="text/javascript"> var root = document.getElementsByTagName( "html" )[0]; root.setAttribute( "class", "js" ); </script><script>
-(function () {
-  const MQ = window.matchMedia("(max-width: 999px)");
-  let io;
-
-  const PAD = 18;
-  const OPEN_OFFSET = 50; // jouw gap
-  const THRESHOLDS = [0, 0.25, 0.5, 0.6, 0.7, 0.8, 1];
-
-  function applyLayout(box, isOpen) {
-    const inner = box.querySelector(".inner");
-    const hw = box.querySelector(".heading-wrap");
-    const hc = box.querySelector(".hover-content");
-    if (!inner || !hw || !hc) return;
-
-    inner.style.position = "absolute";
-    inner.style.inset = "0";
-    inner.style.zIndex = "5";
-    inner.style.padding = PAD + "px";
-
-    hw.style.position = "absolute";
-    hw.style.left = PAD + "px";
-    hw.style.right = PAD + "px";
-    hw.style.zIndex = "9";
-    hw.style.transition = "bottom .25s ease, transform .25s ease";
-    hw.style.transform = "none";
-
-    hc.style.position = "absolute";
-    hc.style.left = PAD + "px";
-    hc.style.right = PAD + "px";
-    hc.style.zIndex = "9";
-    hc.style.lineHeight = "1.25";
-    hc.style.transition = "opacity .2s ease, transform .2s ease, visibility .2s ease";
-
-    hc.style.bottom = PAD + "px";
-    hw.style.bottom = isOpen ? (PAD + OPEN_OFFSET) + "px" : PAD + "px";
-  }
-
-  function openBox(box) {
-    box.classList.add("hf-inview", "hovered");
-    applyLayout(box, true);
-  }
-
-  function closeBox(box) {
-    box.classList.remove("hf-inview", "hovered");
-    applyLayout(box, false);
-  }
-
-  function init() {
-    const boxes = Array.from(document.querySelectorAll('.nectar-fancy-box[data-style="hover_desc"]'));
-    if (!boxes.length) return;
-
-    if (!MQ.matches) {
-      if (io) io.disconnect();
-      boxes.forEach(b => b.classList.remove("hf-inview","hovered"));
-      return;
-    }
-
-    // start all closed
-    boxes.forEach(b => applyLayout(b, false));
-
-    if (io) io.disconnect();
-
-    io = new IntersectionObserver((entries) => {
-      // choose the single most visible element (highest intersectionRatio)
-      let bestEl = null;
-      let bestRatio = -1;
-
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > bestRatio) {
-          bestRatio = entry.intersectionRatio;
-          bestEl = entry.target;
-        }
-      });
-
-      // Hard rule: only 1 open at all times -> close all others
-      boxes.forEach(b => {
-        if (b === bestEl) openBox(b);
-        else closeBox(b);
-      });
-
-    }, {
-      threshold: THRESHOLDS,
-      // makes "most visible" behave closer to "center" for tall cards
-      rootMargin: "-20% 0px -20% 0px"
-    });
-
-    boxes.forEach(b => io.observe(b));
-  }
-
-  document.addEventListener("DOMContentLoaded", init);
-  window.addEventListener("load", init);
-  window.addEventListener("resize", init);
-  if (MQ.addEventListener) MQ.addEventListener("change", init);
-})();
-</script>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var tries = 0;
-    var t = setInterval(function () {
-      tries++;
-      if (tries > 30) return clearInterval(t);
-
-      var switcher = document.querySelector('.country-selector.weglot-default');
-      var btn      = document.querySelector('.country-selector .wgcurrent');
-      var ul       = document.querySelector('.country-selector ul');
-      if (!switcher || !btn || !ul || !window.Weglot) return;
-      clearInterval(t);
-
-      document.body.appendChild(ul);
-      ul.classList.add('wg-portal');
-
-      ul.querySelectorAll('li').forEach(function (li) {
-        li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px
-  16px;cursor:pointer;list-style:none;';
-        li.querySelectorAll('a,span').forEach(function (el) {
-          el.style.cssText =
-  'color:rgba(255,255,255,0.8);font-size:11px;font-family:Helvetica
-  Neue,sans-serif;letter-spacing:.1em;text-transform:uppercase;font-weight:500;tex
-  t-decoration:none;cursor:pointer;pointer-events:none;';
-        });
-        li.addEventListener('mouseenter', function () { li.style.background =
-  '#8B0000'; });
-        li.addEventListener('mouseleave', function () { li.style.background =
-  'transparent'; });
-
-        li.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-
-          // Get lang code from class e.g. "wg-li-en" → "en"
-          var langCode = null;
-          li.classList.forEach(function (c) {
-            if (c.startsWith('wg-li-') && c !== 'wg-li') {
-              langCode = c.replace('wg-li-', '');
-            }
-          });
-
-          if (langCode) {
-            Weglot.switchTo(langCode);
-            ul.style.setProperty('display', 'none', 'important');
-          }
-        });
-      });
-
-      function reposition() {
-        var r = btn.getBoundingClientRect();
-        ul.style.setProperty('top',  (r.bottom + 6) + 'px', 'important');
-        ul.style.setProperty('left', r.left + 'px',          'important');
-      }
-
-      new MutationObserver(reposition).observe(ul,       { attributes: true });
-      new MutationObserver(reposition).observe(switcher, { attributes: true });
-      btn.addEventListener('click', function () { setTimeout(reposition, 10); });
-
-    }, 200);
+  h+=`</div></div>`;
+  wrap.innerHTML=h;
+  wrap.querySelector('#calPrev').onclick=()=>{ if(calMonth===0){calMonth=11;calYear--;}else calMonth--; drawCal(); };
+  wrap.querySelector('#calNext').onclick=()=>{ if(calMonth===11){calMonth=0;calYear++;}else calMonth++; drawCal(); };
+  wrap.querySelectorAll('.cal-day:not([disabled])').forEach(b=>b.onclick=()=>{
+    state.datum=b.dataset.iso; state.flexibel=false;
+    const fc=document.getElementById('flexChip'); if(fc) fc.setAttribute('aria-pressed','false');
+    drawCal(); updateNav();
   });
-  </script>	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
-	<meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress."/>
-<style class='wp-fonts-local' type='text/css'>
-@font-face{font-family:Inter;font-style:normal;font-weight:300 900;font-display:fallback;src:url('../wp-content/plugins/woocommerce/assets/fonts/Inter-VariableFont_slnt%2cwght.woff2') format('woff2');font-stretch:normal;}
-@font-face{font-family:Cardo;font-style:normal;font-weight:400;font-display:fallback;src:url('../wp-content/plugins/woocommerce/assets/fonts/cardo_normal_400.woff2') format('woff2');}
-</style>
-<link rel="icon" href="../wp-content/uploads/2026/02/cropped-Logo_white-heli-png-2-32x32.png" sizes="32x32" />
-<link rel="icon" href="../wp-content/uploads/2026/02/cropped-Logo_white-heli-png-2-192x192.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="../wp-content/uploads/2026/02/cropped-Logo_white-heli-png-2-180x180.png" />
-<meta name="msapplication-TileImage" content="https://heli-flights.be/wp-content/uploads/2026/02/cropped-Logo_white-heli-png-2-270x270.png" />
-<noscript><style> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='main-styles-non-critical-css' href='../wp-content/themes/salient/css/build/style-non-criticalf411.css?ver=18.0.2' type='text/css' media='all' />
-<link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='nectar-woocommerce-non-critical-css' href='../wp-content/themes/salient/css/build/third-party/woocommerce/woocommerce-non-criticalf411.css?ver=18.0.2' type='text/css' media='all' />
-<link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='fancyBox-css' href='../wp-content/themes/salient/css/build/plugins/jquery.fancybox3d36.css?ver=3.3.1' type='text/css' media='all' />
-<link rel='stylesheet' id='nectar-smooth-scroll-css' href='../wp-content/themes/salient/css/build/plugins/lenisf411.css?ver=18.0.2' type='text/css' media='all' />
-<link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='nectar-ocm-core-css' href='../wp-content/themes/salient/css/build/off-canvas/coref411.css?ver=18.0.2' type='text/css' media='all' />
-<link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='nectar-ocm-slide-out-right-material-css' href='../wp-content/themes/salient/css/build/off-canvas/slide-out-right-materialf411.css?ver=18.0.2' type='text/css' media='all' />
-<link data-pagespeed-no-defer data-nowprocket data-wpacu-skip data-no-optimize data-noptimize rel='stylesheet' id='nectar-ocm-slide-out-right-hover-css' href='../wp-content/themes/salient/css/build/off-canvas/slide-out-right-hoverf411.css?ver=18.0.2' type='text/css' media='all' />
+}
 
-<style id="brand-helvetica-neue">
-@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Roman.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
-@font-face{font-family:'Helvetica Neue';src:url('/fonts/HelveticaNeue-Black.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
-@font-face{font-family:'Helvetica Neue Condensed';src:url('/fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
-/* Brandbook FONT */
-:root{--display:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--body:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--sans:'Helvetica Neue',Helvetica,Arial,sans-serif!important;--serif:'Helvetica Neue',Helvetica,Arial,sans-serif!important}
-/* Brandbook KLEUREN */
-:root{--ink:#404041!important;--bg:#f3f3f4!important;--bg-pure:#f3f3f4!important;--accent-2:#f3f3f4!important}
-/* Brandbook TYPOGRAFIE: titels = Condensed Black UPPERCASE +25 tracking lh1.2 */
-h1,h2,.svc-title,.trust-headline{font-family:'Helvetica Neue Condensed','Helvetica Neue',Helvetica,Arial,sans-serif!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.025em!important;line-height:1.2!important}
-.svc-title::after,.trust-headline::after{content:"";display:block;width:48px;height:3px;margin-top:14px;background:#8e0000}
-/* Brandbook NAVIGATIE-MENU */
-.site-nav-brand{font-family:'Helvetica Neue Condensed','Helvetica Neue',sans-serif!important;font-weight:900!important;letter-spacing:.05em;text-transform:uppercase}
-.site-nav-links a{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.09em;font-weight:600;position:relative}
-.site-nav-links a:not(.site-nav-b2b):hover{color:#8e0000}
-.site-nav-links a:not(.site-nav-b2b)::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:#8e0000;transition:width .22s ease}
-.site-nav-links a:not(.site-nav-b2b):hover::after{width:100%}
-.site-nav-b2b{background:#8e0000!important;color:#fff!important;padding:8px 16px!important;letter-spacing:.08em;border:none!important}
-.site-nav-b2b:hover{background:#6f0000!important}
-.site-nav-toggle span{background:#8e0000}
-/* Quote + Google reviews ongemoeid; WebGL onaangeraakt */
-.quote-block,.quote-text,.quote-mark,.quote-attr,.review-card,.review-text,.review-name{--display:'Bricolage Grotesque','Times New Roman',serif;--body:'Inter Tight',system-ui,sans-serif;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif;--ink:#0a0a0b}
-.review-card,.review-text,.review-name{--bg:#ffffff}
-.quote-block,.quote-text,.quote-mark,.quote-attr{font-family:var(--serif)!important;text-transform:none!important}
-</style>
+function render(){
+  steps = buildSteps();
+  if(i>=steps.length) i=steps.length-1;
+  const step = steps[i];
+  stage.scrollTop = 0;
 
-</head><body class="wp-singular page-template-default page page-id-342 wp-theme-salient theme-salient woocommerce-no-js material nectar_using_pfsr nectar-no-flex-height wpb-js-composer js-comp-ver-8.6.1 vc_responsive" data-footer-reveal="false" data-footer-reveal-shadow="none" data-header-format="centered-menu" data-body-border="off" data-boxed-style="" data-header-breakpoint="1000" data-dropdown-style="minimal" data-cae="easeOutCubic" data-cad="750" data-megamenu-width="full-width" data-aie="fade-in" data-ls="fancybox" data-apte="standard" data-hhun="0" data-fancy-form-rcs="default" data-form-style="default" data-form-submit="regular" data-is="minimal" data-button-style="rounded_shadow" data-user-account-button="false" data-flex-cols="true" data-col-gap="default" data-header-inherit-rc="false" data-header-search="false" data-animated-anchors="true" data-ajax-transitions="false" data-full-width-header="true" data-slide-out-widget-area="true" data-slide-out-widget-area-style="slide-out-from-right" data-user-set-ocm="1" data-loading-animation="none" data-bg-header="true" data-responsive="1" data-ext-responsive="true" data-ext-padding="90" data-header-resize="1" data-header-color="custom" data-cart="true" data-remove-m-parallax="" data-remove-m-video-bgs="" data-m-animate="0" data-force-header-trans-color="light" data-smooth-scrolling="0" data-permanent-transparent="1" >
-	
-	<script type="text/javascript">
-	 (function(window, document) {
+  // step indicator
+  stepsBar.innerHTML = steps.map((s,k)=>`<span class="seg${k<=i?' done':''}"></span>`).join('');
+  stepCount.innerHTML = 'STAP ' + (i+1) + ' <em>/ ' + steps.length + '</em>';
 
-		document.documentElement.classList.remove("no-js");
+  let html = '<div class="screen enter">';
+  html += `<span class="eyebrow"><span class="sq"></span>${esc(step.label)}${step.optional?' <em>· optioneel</em>':''}</span>`;
+  html += `<h1 class="q">${step.q}</h1>`;
+  if(step.help) html += `<p class="q-help">${esc(step.help)}</p>`;
 
-		if(navigator.userAgent.match(/(Android|iPod|iPhone|iPad|BlackBerry|IEMobile|Opera Mini)/)) {
-			document.body.className += " using-mobile-browser mobile ";
-		}
-		if(navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2) {
-			document.body.className += " using-ios-device ";
-		}
+  if(step.type==='single'){
+    html += '<div class="options">';
+    step.options.forEach((o,idx)=>{
+      const cur = (step.id==='gelegenheid')?state.gelegenheid:state[step.id];
+      const on = cur===o.v;
+      html += `<button class="opt" data-v="${o.v}" aria-checked="${on}">
+        <span class="key">${String.fromCharCode(65+idx)}</span>
+        <span class="txt"><b>${esc(o.b)}</b>${o.s?`<small>${esc(o.s)}</small>`:''}</span>
+        ${tickSVG}</button>`;
+    });
+    html += '</div>';
+  }
+  else if(step.type==='multi'){
+    html += '<div class="options">';
+    step.options.forEach((o)=>{
+      const on = state.extras.includes(o.v);
+      html += `<button class="opt multi" data-v="${o.v}" aria-checked="${on}">
+        <span class="key">${on?'✓':''}</span>
+        <span class="txt"><b>${esc(o.b)}</b>${o.s?`<small>${esc(o.s)}</small>`:''}</span>
+        ${tickSVG}</button>`;
+    });
+    html += '</div>';
+  }
+  else if(step.type==='stepper'){
+    html += `<div class="stepper">
+      <button data-act="dec" aria-label="minder">−</button>
+      <div><span class="val" id="pval">${state.personen}</span></div>
+      <button data-act="inc" aria-label="meer">+</button>
+      <span class="unit">personen</span></div>`;
+  }
+  else if(step.type==='date'){
+    html += `<div id="calWrap"></div>
+      <div class="toggle-row">
+        <button class="chip" id="flexChip" aria-pressed="${state.flexibel}">Ik ben flexibel / last-minute</button>
+      </div>`;
+  }
+  else if(step.type==='info'){
+    html += '<div class="info-box"><ul>';
+    step.items.forEach(it=>{ html += `<li><span class="sq"></span><span>${esc(it)}</span></li>`; });
+    html += `</ul></div><p class="info-note">${esc(step.note)}</p>`;
+  }
+  else if(step.type==='form'){
+    html += `<div class="form-grid">
+        <div class="field"><label>Voornaam</label><input id="voornaam" value="${esc(state.voornaam)}" placeholder="Voornaam"></div>
+        <div class="field"><label>Achternaam</label><input id="achternaam" value="${esc(state.achternaam)}" placeholder="Achternaam"></div>
+      </div>
+      <div class="field"><label>E-mail</label><input id="email" type="email" value="${esc(state.email)}" placeholder="jouw@email.be"></div>
+      <div class="field"><label>Telefoonnummer</label><input id="tel" type="tel" value="${esc(state.tel)}" placeholder="+32 4.."></div>`;
+  }
+  else if(step.type==='summary'){
+    const dur = ({'30':'30 minuten','45':'45 minuten','60':'60 minuten','langer':'Op maat'})[state.duur]||'—';
+    const findLabel=(set,v)=>{const a=(set||[]).find(x=>x.v===v);return a?a.b:null;};
+    let routeLabel = findLabel(routeSets[state.vertrek],state.route) ||
+      ({'zelf':'Zelf uitgestippeld','advies':'Advies gevraagd'})[state.route] || '—';
+    const vertrekLabel = ({'antwerpen':'Regio Antwerpen','kust':'Regio Kust','eigen':'Eigen locatie'})[state.vertrek]||'—';
+    const extrasLabel = state.extras.length ? state.extras.map(e=>({champagne:'Champagne',gopro:'GoPro',cameraman:'Cameraman',reportage:'Fotoreportage',certificaat:'Certificaat'})[e]).join(' · ') : 'Geen';
+    html += `<div class="summary">
+      <div class="row"><span class="k">Vertrek</span><span class="v">${vertrekLabel}</span></div>
+      <div class="row"><span class="k">Route</span><span class="v">${esc(routeLabel)}</span></div>
+      <div class="row"><span class="k">Duur</span><span class="v">${dur}</span></div>
+      <div class="row"><span class="k">Personen</span><span class="v">${state.personen}</span></div>
+      <div class="row"><span class="k">Datum</span><span class="v">${state.datum||(state.flexibel?'Flexibel':'—')}</span></div>
+      <div class="row"><span class="k">Extra's</span><span class="v">${esc(extrasLabel)}</span></div>
+    </div>
+    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens aan vast.</b> We checken de beschikbaarheid en bezorgen je binnen 24u een voorstel met prijs. Bij slecht weer boeken we gratis om.</span></div>`;
+  }
 
-		if( !("ontouchstart" in window) ) {
+  html += '</div>';
+  stage.innerHTML = html;
 
-			var body = document.querySelector("body");
-			var winW = window.innerWidth;
-			var bodyW = body.clientWidth;
+  if(step.type==='date'){ if(calYear===undefined) initCal(); drawCal(); }
 
-			if (winW > bodyW + 4) {
-				body.setAttribute("style", "--scroll-bar-w: " + (winW - bodyW - 4) + "px");
-			} else {
-				body.setAttribute("style", "--scroll-bar-w: 0px");
-			}
-		}
-
-	 })(window, document);
-   </script><nav aria-label="Skip links" class="nectar-skip-to-content-wrap"><a href="#ajax-content-wrap" class="nectar-skip-to-content">Skip to main content</a></nav><div class="ocm-effect-wrap"><div class="ocm-effect-wrap-inner">	
-	<div id="header-space"  data-header-mobile-fixed='1'></div> 
-	
-		<div id="header-outer" data-has-menu="true" data-has-buttons="yes" data-header-button_style="default" data-using-pr-menu="false" data-mobile-fixed="1" data-ptnm="1" data-lhe="button_bg" data-user-set-bg="#ffffff" data-format="centered-menu" data-permanent-transparent="1" data-megamenu-rt="1" data-remove-fixed="0" data-header-resize="1" data-cart="true" data-transparency-option="1" data-box-shadow="none" data-shrink-num="6" data-using-secondary="0" data-using-logo="1" data-logo-height="60" data-m-logo-height="40" data-padding="32" data-full-width="true" data-condense="false" data-transparent-header="true" data-transparent-shadow-helper="false" data-remove-border="true" class="transparent">
-		
-<div id="search-outer" class="nectar">
-	<div id="search">
-		<div class="container">
-			 <div id="search-box">
-				 <div class="inner-wrap">
-					 <div class="col span_12">
-						  <form role="search" action="https://heli-flights.be/" method="GET">
-														 <input type="text" name="s"  value="" aria-label="Search" placeholder="Search" />
-							 
-						<span>Hit enter to search or ESC to close</span>
-						<button aria-label="Search" class="search-box__button" type="submit">Search</button>						</form>
-					</div><!--/span_12-->
-				</div><!--/inner-wrap-->
-			 </div><!--/search-box-->
-			 <div id="close"><a href="#" role="button"><span class="screen-reader-text">Close Search</span>
-				<span class="close-wrap"> <span class="close-line close-line1" role="presentation"></span> <span class="close-line close-line2" role="presentation"></span> </span>				 </a></div>
-		 </div><!--/container-->
-	</div><!--/search-->
-</div><!--/search-outer-->
-
-<header id="top" role="banner" aria-label="Main Menu">
-		<div class="container">
-		<div class="row">
-			<div class="col span_3">
-								<a id="logo" href="../index.html" data-supplied-ml-starting-dark="false" data-supplied-ml-starting="false" data-supplied-ml="false" >
-					<img class="stnd skip-lazy dark-version" width="512" height="512" alt="Heli-flights" src="../wp-content/uploads/2026/01/cropped-heli-logo-red%404x-scaled-1.png"  />				</a>
-							</div><!--/span_3-->
-
-			<div class="col span_9 col_last">
-									<div class="nectar-mobile-only mobile-header"><div class="inner"></div></div>
-				
-						<a id="mobile-cart-link" aria-label="Cart" data-cart-style="slide_in_click" href="../cart/index.html"><i class="icon-salient-cart"></i><div class="cart-wrap"><span>0 </span></div></a>
-															<div class="slide-out-widget-area-toggle mobile-icon slide-out-from-right" data-custom-color="true" data-icon-animation="simple-transform">
-						<div> <a href="#slide-out-widget-area" role="button" aria-label="Navigation Menu" aria-expanded="false" class="closed">
-							<span class="screen-reader-text">Menu</span><span aria-hidden="true"> <i class="lines-button x2" data-variant="even_lines"> <i class="lines"></i> </i> </span>						</a></div>
-					</div>
-				
-									<nav aria-label="Main Menu">
-													<ul class="sf-menu">
-								<li id="menu-item-1020" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item megamenu nectar-megamenu-menu-item align-right width-100 menu-item-icon-alignment-right menu-item-has-icon button_solid_color menu-item-1020"><a href="index.html" aria-current="page"><i class="nectar-menu-icon fa fa-angle-right" role="presentation"></i><span class="menu-title-text">Vlieg nu</span></a></li>
-							</ul>
-													<ul class="buttons sf-menu" data-user-set-ocm="1"><li class="nectar-header-text-content-wrap"><div class="nectar-header-text-content"><div><span style="color: #3c434a;font-family: -apple-system, 'system-ui', 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;font-size: 14px;background-color: #f0f0f1"><!--Weglot 5.3--><aside data-wg-notranslate="" class="country-selector weglot-dropdown close_outside_click closed weglot-shortcode wg-" tabindex="0" aria-expanded="false" aria-label="Language selected: Dutch"><input id="wg6a0a1384be2ac9.689465711779045252639" class="weglot_choice" type="checkbox" name="menu"/><label data-l="nl" tabindex="-1" for="wg6a0a1384be2ac9.689465711779045252639" class="wgcurrent wg-li weglot-lang weglot-language weglot-flags flag-3 wg-nl" data-code-language="wg-nl" data-name-language="NL"><span class="wglanguage-name">NL</span></label><ul role="none"><li data-l="en" class="wg-li weglot-lang weglot-language weglot-flags flag-3 wg-en" data-code-language="en" role="option"><a title="Language switcher : English" class="weglot-language-en" role="option" data-wg-notranslate="" href="../en/prive-rondvlucht-aanvraag/index.html">EN</a></li></ul></aside></span></div></div></li><li class="nectar-woo-cart">
-			<div class="cart-outer" data-user-set-ocm="1" data-cart-style="slide_in_click">
-				<div class="cart-menu-wrap">
-					<div class="cart-menu">
-						<a class="cart-contents" href="../cart/index.html"><div class="cart-icon-wrap"><i class="icon-salient-cart" aria-hidden="true"></i> <div class="cart-wrap"><span>0 </span></div> </div></a>
-					</div>
-				</div>
-
-				
-				
-			</div>
-
-			</li><li class="slide-out-widget-area-toggle" data-icon-animation="simple-transform" data-custom-color="true"><div> <a href="#slide-out-widget-area" aria-label="Navigation Menu" aria-expanded="false" role="button" class="closed"> <span class="screen-reader-text">Menu</span><span aria-hidden="true"> <i class="lines-button x2" data-variant="even_lines"> <i class="lines"></i> </i> </span> </a> </div></li></ul>
-						
-					</nav>
-
-					<div class="logo-spacing" data-using-image="true"><img class="hidden-logo skip-lazy" alt="Heli-flights" width="512" height="512" src="../wp-content/uploads/2026/01/cropped-heli-logo-red%404x-scaled-1.png" /></div>
-				</div><!--/span_9-->
-
-				
-			</div><!--/row-->
-					</div><!--/container-->
-	</header>		
-	</div>
-	<div class="nectar-slide-in-cart nectar-modal style_slide_in_click" role="dialog" aria-modal="true" aria-label="Cart"><div class="inner"><div class="header"><span data-inherit-heading-family="h4">Cart</span><a href="#" class="close-cart"><span class="screen-reader-text">Close Cart</span><span class="close-wrap"><span class="close-line close-line1"></span><span class="close-line close-line2"></span></span></a></div><div class="widget woocommerce widget_shopping_cart"><div class="widget_shopping_cart_content"></div></div></div></div><div class="nectar-slide-in-cart-bg"></div>	<div id="ajax-content-wrap">
-<div class="container-wrap">
-	<div class=" main-content" role="main">
-		<div class="row">
-			<div id="nectar_fullscreen_rows" data-animation="none" data-row-bg-animation="none" data-animation-speed="medium" data-content-overflow="scrollbar" data-mobile-disable="off" data-dot-navigation="transparent" data-footer="none" data-anchors="off">
-		<div id="fws_6a0a1384bef94"  data-column-margin="default" data-midnight="dark"  class="wpb_row vc_row-fluid vc_row full-width-content vc_row-o-equal-height vc_row-flex vc_row-o-content-top  top_margin_-2pct top_margin_phone_-2pct"  style=""><div class="full-page-inner-wrap-outer"><div class="full-page-inner-wrap" data-name="" data-content-pos="middle"><div class="full-page-inner"><div class="row-bg-wrap" data-bg-animation="none" data-bg-animation-delay="" data-bg-overlay="false"><div class="inner-wrap row-bg-layer" ><div class="row-bg viewport-desktop"  style=""></div></div></div><div class="row_col_wrap_12 col span_12 dark left">
-	<div  class="vc_col-sm-12 wpb_column column_container vc_column_container col centered-text no-extra-padding inherit_tablet inherit_phone "  data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
-		<div class="vc_column-inner" >
-			<div class="wpb_wrapper">
-				<div id="fws_6a0a1384bf20a" data-midnight="" data-column-margin="default" class="wpb_row vc_row-fluid vc_row inner_row"  style="padding-top: 0%; "><div class="row-bg-wrap"> <div class="row-bg" ></div> </div><div class="row_col_wrap_12_inner col span_12  left">
-	<div style="margin-top: 0%; " class="vc_col-sm-12 wpb_column column_container vc_column_container col child_column no-extra-padding inherit_tablet inherit_phone height_desktop_1080px height_phone_740px "   data-padding-pos="all" data-has-bg-color="false" data-bg-color="" data-bg-opacity="1" data-animation="" data-delay="0" >
-		<div class="vc_column-inner" >
-		<div class="wpb_wrapper">
-			
-	<div class="wpb_raw_code wpb_raw_html wpb_content_element" >
-		<div class="wpb_wrapper">
-			<html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 110%; }
-    iframe {
-      width: 100%;
-      height: 90vh;
-      border: none;
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <iframe id="booking-frame" src="#" title="Heli-Flights Boeking"></iframe>
- 
-  <script>
-    const BASE = 'https://heli-priverondvlucht-production.up.railway.app/';
- 
-    const url = new URL(BASE.html);
- 
-    // 1. Pak alle URL params van de huidige pagina
-    const params = new URLSearchParams(window.location.search);
-    params.forEach((val, key) => url.searchParams.set(key, val));
- 
-    // 2. Pak alles uit localStorage en voeg toe als URL params
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const val = localStorage.getItem(key);
-      // Alleen toevoegen als nog niet in URL params aanwezig (URL heeft prioriteit)
-      if (!url.searchParams.has(key)) {
-        url.searchParams.set(key, val);
+  stage.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const v = el.dataset.v;
+      if(step.type==='multi'){
+        const idx = state.extras.indexOf(v);
+        if(idx>=0) state.extras.splice(idx,1); else state.extras.push(v);
+        render();
+      } else {
+        if(step.id==='gelegenheid') state.gelegenheid=v; else state[step.id]=v;
+        setTimeout(()=>{ if(i<steps.length-1){ i++; } render(); }, 180);
       }
-    }
- 
-    document.getElementById('booking-frame').src = url.toString();
-  </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fd4f19a38dc3235',t:'MTc3OTA0NTI1Mg=='};var a=document.createElement('script');a.src='../cdn-cgi/challenge-platform/h/b/scripts/jsd/883a1f27d85f/maind41d.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-		</div>
-	</div>
+      updateNav();
+    });
+  });
+  const dec=stage.querySelector('[data-act="dec"]'), inc=stage.querySelector('[data-act="inc"]');
+  if(dec) dec.onclick=()=>{ state.personen=Math.max(1,state.personen-1); document.getElementById('pval').textContent=state.personen; };
+  if(inc) inc.onclick=()=>{ state.personen=Math.min(6,state.personen+1); document.getElementById('pval').textContent=state.personen; };
+  const flex=stage.querySelector('#flexChip'); if(flex) flex.onclick=()=>{
+    state.flexibel=!state.flexibel; if(state.flexibel) state.datum='';
+    flex.setAttribute('aria-pressed',state.flexibel); drawCal(); updateNav();
+  };
+  ['voornaam','achternaam','email','tel'].forEach(id=>{const el=stage.querySelector('#'+id); if(el) el.oninput=e=>{state[id]=e.target.value; updateNav();};});
 
-		</div> 
-	</div>
-	</div> 
-</div></div>
-			</div> 
-		</div>
-	</div> 
-</div></div></div></div></div><!--inner-wrap-->
-</div>		</div>
-	</div>
-	</div>
+  updateNav();
+}
 
-<div id="footer-outer" data-midnight="light" data-cols="4" data-custom-color="false" data-disable-copyright="false" data-matching-section-color="true" data-copyright-line="false" data-using-bg-img="false" data-bg-img-overlay="0.8" data-full-width="false" data-using-widget-area="false" data-link-hover="default"role="contentinfo">
-	
-	
-  <div class="row" id="copyright" data-layout="default">
+function stepValid(){
+  const step = steps[i];
+  if(step.optional || step.type==='info' || step.type==='multi' || step.type==='stepper' || step.type==='summary') return true;
+  if(step.type==='single') return !!(step.id==='gelegenheid'?state.gelegenheid:state[step.id]);
+  if(step.type==='date') return !!(state.datum || state.flexibel);
+  if(step.type==='form') return state.voornaam.trim() && state.achternaam.trim() && /.+@.+\..+/.test(state.email);
+  return true;
+}
 
-	<div class="container">
+function updateNav(){
+  backBtn.disabled = (i===0);
+  nextBtn.textContent = (i===steps.length-1) ? 'Vraag je vlucht aan →' : 'Volgende';
+  nextBtn.disabled = !stepValid();
+  hint.style.visibility = stepValid()? 'visible':'hidden';
+}
 
-				<div class="col span_5">
+function next(){
+  if(!stepValid()) return;
+  if(i===steps.length-1){ submitAanvraag(); return; }
+  i++; nextBtn.style.display=''; render();
+}
+function back(){ if(i>0){ i--; nextBtn.style.display=''; render(); } }
 
-			<p>&copy; 2026 Heli-flights. </p>
-		</div><!--/span_5-->
-		
-	  <div class="col span_7 col_last">
-      <ul class="social">
-              </ul>
-	  </div><!--/span_7-->
+async function submitAanvraag(){
+  nextBtn.disabled=true; nextBtn.textContent='Versturen…'; hint.style.visibility='hidden';
+  const payload = { ...state, bron:'prive-rondvlucht', aangevraagd_op:new Date().toISOString() };
+  let ok = true;
+  if(SUBMIT_ENDPOINT){
+    try{ const r = await fetch(SUBMIT_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); ok=r.ok; }
+    catch(e){ ok=false; }
+  } else { console.log('[Heli-Flights] Aanvraag (geen SUBMIT_ENDPOINT ingesteld):', payload); }
+  ok ? showSuccess() : showError();
+}
 
-	  
-	</div><!--/container-->
-  </div><!--/row-->
-		
-</div><!--/footer-outer-->
+function showSuccess(){
+  const voornaam=(state.voornaam||'').trim();
+  stepsBar.innerHTML = steps.map(()=>`<span class="seg done"></span>`).join('');
+  stage.innerHTML = `<div class="screen enter" style="text-align:center;max-width:560px;">
+    <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Aanvraag verzonden</span>
+    <h1 class="q" style="text-align:center">Tot in de <span class="imp">lucht</span>${voornaam?', '+esc(voornaam):''}.</h1>
+    <p class="q-help" style="margin-left:auto;margin-right:auto">We bekijken de beschikbaarheid en bezorgen je binnen 24u een voorstel met prijs op <b>${esc(state.email||'je e-mail')}</b>. Bij slecht weer boeken we gratis om.</p>
+  </div>`;
+  backBtn.style.display='none'; nextBtn.style.display='none'; hint.style.visibility='hidden';
+  stepCount.textContent='VERZONDEN';
+}
+function showError(){
+  stage.innerHTML = `<div class="screen enter" style="max-width:560px;">
+    <span class="eyebrow"><span class="sq"></span>Er ging iets mis</span>
+    <h1 class="q">Aanvraag <span class="imp">niet verstuurd</span></h1>
+    <p class="q-help">Probeer het opnieuw. Lukt het niet, bel ons dan rechtstreeks — we helpen je meteen verder.</p>
+  </div>`;
+  nextBtn.style.display=''; nextBtn.disabled=false; nextBtn.textContent='Opnieuw proberen →'; hint.style.visibility='hidden';
+}
 
+nextBtn.addEventListener('click',next);
+backBtn.addEventListener('click',back);
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !nextBtn.disabled && nextBtn.style.display!=='none'){ next(); }
+  if(e.key==='Escape'){ back(); }
+});
 
-	<div id="slide-out-widget-area-bg" class="slide-out-from-right dark">
-				</div>
-
-		<div id="slide-out-widget-area" role="dialog" aria-modal="true" aria-label="Off Canvas Menu" class="slide-out-from-right" data-dropdown-func="default" data-back-txt="Back">
-
-			<div class="inner-wrap">
-			<div class="inner" data-prepend-menu-mobile="true">
-
-				<a class="slide_out_area_close" href="#"><span class="screen-reader-text">Close Menu</span>
-					<span class="close-wrap"> <span class="close-line close-line1" role="presentation"></span> <span class="close-line close-line2" role="presentation"></span> </span>				</a>
-
-
-				<div class="nectar-header-text-content mobile-only"><div><span style="color: #3c434a;font-family: -apple-system, 'system-ui', 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;font-size: 14px;background-color: #f0f0f1"><!--Weglot 5.3--><aside data-wg-notranslate="" class="country-selector weglot-dropdown close_outside_click closed weglot-shortcode wg-" tabindex="0" aria-expanded="false" aria-label="Language selected: Dutch"><input id="wg6a0a1384bff517.636691321779045252636" class="weglot_choice" type="checkbox" name="menu"/><label data-l="nl" tabindex="-1" for="wg6a0a1384bff517.636691321779045252636" class="wgcurrent wg-li weglot-lang weglot-language weglot-flags flag-3 wg-nl" data-code-language="wg-nl" data-name-language="NL"><span class="wglanguage-name">NL</span></label><ul role="none"><li data-l="en" class="wg-li weglot-lang weglot-language weglot-flags flag-3 wg-en" data-code-language="en" role="option"><a title="Language switcher : English" class="weglot-language-en" role="option" data-wg-notranslate="" href="../en/prive-rondvlucht-aanvraag/index.html">EN</a></li></ul></aside></span></div></div>					<div class="off-canvas-menu-container mobile-only" role="navigation">
-
-						
-						<ul class="menu">
-							<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-icon-alignment-right menu-item-has-icon menu-item-1020"><a href="index.html" aria-current="page"><i class="nectar-menu-icon fa fa-angle-right"></i><span class="menu-title-text">Vlieg nu</span></a></li>
-
-						</ul>
-
-						<ul class="menu secondary-header-items">
-													</ul>
-					</div>
-										<div class="off-canvas-menu-container" role="navigation">
-						<ul class="menu">
-							<li id="menu-item-396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-396"><a href="../index.html">Home</a></li>
-<li id="menu-item-574" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-574"><a href="../onze-diensten/index.html" aria-haspopup="true" aria-expanded="false">Onze vluchten</a>
-<ul class="sub-menu">
-	<li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="../prive-rondvlucht/index.html">Privé rondvlucht</a></li>
-	<li id="menu-item-390" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-390"><a href="../zelf-vliegen/index.html">Zelf vliegen</a></li>
-	<li id="menu-item-391" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-391"><a href="../gedeelde-vlucht/index.html">Boek per stoel</a></li>
-	<li id="menu-item-389" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-389"><a href="../trouwvlucht/index.html">Trouwvlucht</a></li>
-	<li id="menu-item-649" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-649"><a href="../huwelijksaanzoek/index.html">Huwelijksaanzoek</a></li>
-	<li id="menu-item-1024" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1024"><a href="../contact-b2b/index.html">B2B</a></li>
-</ul>
-</li>
-<li id="menu-item-577" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-577"><a href="../over-ons/index.html">Over ons</a></li>
-<li id="menu-item-712" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-712"><a href="../contacteer/index.html">Contact</a></li>
-<li id="menu-item-713" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-713"><a href="../veelgestelde-vragen/index.html">FAQ</a></li>
-
-						</ul>
-
-							
-					</div>
-
-					
-				</div>
-
-				<div class="bottom-meta-wrap"></div><!--/bottom-meta-wrap--></div> <!--/inner-wrap-->
-				</div>
-		
-</div> <!--/ajax-content-wrap-->
-
-	<a id="to-top" aria-label="Back to top" role="button" href="#" class="mobile-disabled"><i role="presentation" class="fa fa-angle-up"></i></a>
-	</div></div><!--/ocm-effect-wrap--><script type="speculationrules">
-{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/salient/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+render();
 </script>
-		<script>
- document.addEventListener('DOMContentLoaded', function () {
-				if (!String.prototype.startsWith) {
-					String.prototype.startsWith = function (searchString, position) {
-						position = position || 0;
-						return this.substr(position, searchString.length) === searchString;
-					};
-				}
-				jQuery('.weglot-lang a').on('click', function (e) {
-					e.preventDefault();
-					var href = jQuery(this).attr('href');
-					Object.keys(window.sessionStorage).forEach(function (element) {
-						if (element.startsWith('wc_cart_hash_') || element.startsWith('wc_fragments_')) {
-							window.sessionStorage.removeItem(element);
-						}
-					});
-					window.location.replace(href);
-				})
-			})
- </script>
-		<script id="wpb-modifications"> window.wpbCustomElement = 1; </script>	<script type='text/javascript'>
-		(function () {
-			var c = document.body.className;
-			c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
-			document.body.className = c;
-		})();
-	</script>
-	<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/jquery.easing.min4e44.js?ver=1.3" id="jquery-easing-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/priorityf411.js?ver=18.0.2" id="nectar_priority-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/transit.mine2dc.js?ver=0.9.9" id="nectar-transit-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/waypoints05da.js?ver=4.0.2" id="nectar-waypoints-js"></script>
-<script type="text/javascript" src="../wp-content/plugins/salient-portfolio/js/third-party/imagesLoaded.mineda1.js?ver=4.1.4" id="imagesLoaded-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/hoverintent.min3aa8.js?ver=1.9" id="hoverintent-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/jquery.fancyboxf411.js?ver=18.0.2" id="fancyBox-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/jquery.fullPage.minf411.js?ver=18.0.2" id="fullpage-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/jquery.mousewheel.mina9d5.js?ver=3.1.13" id="jquery-mousewheel-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/elements/nectar-full-page-rowsf411.js?ver=18.0.2" id="nectar-fullpage-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/anime.min8686.js?ver=4.5.1" id="anime-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/third-party/superfish0322.js?ver=1.5.8" id="superfish-js"></script>
-<script type="text/javascript" id="nectar-frontend-js-extra">
-/* <![CDATA[ */
-var nectarLove = {"ajaxurl":"https://heli-flights.be/wp-admin/admin-ajax.php","postID":"342","rooturl":"https://heli-flights.be","disqusComments":"false","loveNonce":"77c6f11675","mapApiKey":""};
-var nectarOptions = {"delay_js":"false","smooth_scroll":"","smooth_scroll_strength":"60","quick_search":"false","react_compat":"disabled","header_entrance":"false","body_border_func":"default","disable_box_roll_mobile":"off","body_border_mobile":"0","dropdown_hover_intent":"default","simplify_ocm_mobile":"0","mobile_header_format":"default","ocm_btn_position":"default","left_header_dropdown_func":"default","ajax_add_to_cart":"0","ocm_remove_ext_menu_items":"default","woo_product_filter_toggle":"0","woo_sidebar_toggles":"true","woo_sticky_sidebar":"0","woo_minimal_product_hover":"default","woo_minimal_product_effect":"default","woo_related_upsell_carousel":"false","woo_product_variable_select":"default","woo_using_cart_addons":"false","view_transitions_effect":""};
-var nectar_front_i18n = {"menu":"Menu","next":"Next","previous":"Previous","close":"Close"};
-//# sourceURL=nectar-frontend-js-extra
-/* ]]> */
-</script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/initf411.js?ver=18.0.2" id="nectar-frontend-js"></script>
-<script type="text/javascript" src="../wp-content/themes/salient/js/build/nectar-smooth-scrollf411.js?ver=18.0.2" id="nectar-smooth-scroll-js"></script>
-<script type="text/javascript" src="../wp-content/plugins/salient-core/js/third-party/touchswipe.min0226.js?ver=3.1.2" id="touchswipe-js"></script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min03b1.js?ver=10.5.1" id="sourcebuster-js-js"></script>
-<script type="text/javascript" id="wc-order-attribution-js-extra">
-/* <![CDATA[ */
-var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"https://heli-flights.be/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
-//# sourceURL=wc-order-attribution-js-extra
-/* ]]> */
-</script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min03b1.js?ver=10.5.1" id="wc-order-attribution-js"></script>
-<script type="text/javascript" id="wc-cart-fragments-js-extra">
-/* <![CDATA[ */
-var wc_cart_fragments_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/?wc-ajax=%%endpoint%%","cart_hash_key":"wc_cart_hash_88d7bb220c1164045c17f0a2c4dd495d","fragment_name":"wc_fragments_88d7bb220c1164045c17f0a2c4dd495d","request_timeout":"5000"};
-//# sourceURL=wc-cart-fragments-js-extra
-/* ]]> */
-</script>
-<script type="text/javascript" src="../wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min03b1.js?ver=10.5.1" id="wc-cart-fragments-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" src="../wp-content/plugins/js_composer_salient/assets/js/dist/js_composer_front.min9b80.js?ver=8.6.1" id="wpb_composer_front_js-js"></script>
-<script id="wp-emoji-settings" type="application/json">
-{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://heli-flights.be/wp-includes/js/wp-emoji-release.min.js?ver=6.9.4"}}
-</script>
-<script type="module">
-/* <![CDATA[ */
-/*! This file is auto-generated */
-const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
-//# sourceURL=https://heli-flights.be/wp-includes/js/wp-emoji-loader.min.js
-/* ]]> */
-</script>
-<script></script></body>
-
-<!-- Mirrored from heli-flights.be/prive-rondvlucht-aanvraag/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 17 May 2026 19:16:05 GMT -->
-</html>

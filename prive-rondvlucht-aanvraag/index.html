@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Privé Rondvlucht — Aanvraag · Heli-Flights</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -234,8 +235,8 @@ function buildSteps(){
       {v:'zakelijk', b:'Zakelijk / VIP', s:''},
       {v:'droom', b:'Gewoon een droom', s:''},
     ]});
-  s.push({id:'contact', type:'form', label:'Jouw gegevens', q:'Waar sturen we je <span class="imp">voorstel</span> naartoe?',
-    help:'We bekijken de beschikbaarheid en bezorgen je een voorstel op maat — inclusief prijs.'});
+  s.push({id:'contact', type:'form', label:'Jouw gegevens', q:'Hoe mogen we je <span class="imp">bereiken</span>?',
+    help:'We bellen je op om je vlucht te bespreken en te bevestigen.'});
   s.push({id:'bevestig', type:'summary', label:'Overzicht', q:'Klaar om <span class="imp">aan te vragen</span>?',
     help:'Check even je keuzes. Je zit nog nergens aan vast.'});
   return s;
@@ -360,8 +361,8 @@ function render(){
         <div class="field"><label>Voornaam</label><input id="voornaam" value="${esc(state.voornaam)}" placeholder="Voornaam"></div>
         <div class="field"><label>Achternaam</label><input id="achternaam" value="${esc(state.achternaam)}" placeholder="Achternaam"></div>
       </div>
-      <div class="field"><label>E-mail</label><input id="email" type="email" value="${esc(state.email)}" placeholder="jouw@email.be"></div>
-      <div class="field"><label>Telefoonnummer</label><input id="tel" type="tel" value="${esc(state.tel)}" placeholder="+32 4.."></div>`;
+      <div class="field"><label>Telefoonnummer</label><input id="tel" type="tel" value="${esc(state.tel)}" placeholder="+32 4.."></div>
+      <div class="field"><label>E-mail <span style="text-transform:none;letter-spacing:0;font-weight:600">(optioneel)</span></label><input id="email" type="email" value="${esc(state.email)}" placeholder="jouw@email.be"></div>`;
   }
   else if(step.type==='summary'){
     const dur = ({'30':'30 minuten','45':'45 minuten','60':'60 minuten','langer':'Op maat'})[state.duur]||'—';
@@ -378,7 +379,7 @@ function render(){
       <div class="row"><span class="k">Datum</span><span class="v">${state.datum||(state.flexibel?'Flexibel':'—')}</span></div>
       <div class="row"><span class="k">Extra's</span><span class="v">${esc(extrasLabel)}</span></div>
     </div>
-    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens aan vast.</b> We checken de beschikbaarheid en bezorgen je binnen 24u een voorstel met prijs. Bij slecht weer boeken we gratis om.</span></div>`;
+    <div class="reassure"><span class="sq"></span><span><b>Je zit nog nergens aan vast.</b> We bellen je binnenkort op om alles te bespreken en je vlucht te bevestigen. Bij slecht weer boeken we gratis om.</span></div>`;
   }
 
   html += '</div>';
@@ -402,7 +403,7 @@ function render(){
   });
   const dec=stage.querySelector('[data-act="dec"]'), inc=stage.querySelector('[data-act="inc"]');
   if(dec) dec.onclick=()=>{ state.personen=Math.max(1,state.personen-1); document.getElementById('pval').textContent=state.personen; };
-  if(inc) inc.onclick=()=>{ state.personen=Math.min(6,state.personen+1); document.getElementById('pval').textContent=state.personen; };
+  if(inc) inc.onclick=()=>{ state.personen=state.personen+1; document.getElementById('pval').textContent=state.personen; };
   const flex=stage.querySelector('#flexChip'); if(flex) flex.onclick=()=>{
     state.flexibel=!state.flexibel; if(state.flexibel) state.datum='';
     flex.setAttribute('aria-pressed',state.flexibel); drawCal(); updateNav();
@@ -417,7 +418,7 @@ function stepValid(){
   if(step.optional || step.type==='info' || step.type==='multi' || step.type==='stepper' || step.type==='summary') return true;
   if(step.type==='single') return !!(step.id==='gelegenheid'?state.gelegenheid:state[step.id]);
   if(step.type==='date') return !!(state.datum || state.flexibel);
-  if(step.type==='form') return state.voornaam.trim() && state.achternaam.trim() && /.+@.+\..+/.test(state.email);
+  if(step.type==='form') return state.voornaam.trim() && state.achternaam.trim() && state.tel.trim().length>=6;
   return true;
 }
 
@@ -452,7 +453,7 @@ function showSuccess(){
   stage.innerHTML = `<div class="screen enter" style="text-align:center;max-width:560px;">
     <span class="eyebrow" style="justify-content:center;width:100%"><span class="sq"></span>Aanvraag verzonden</span>
     <h1 class="q" style="text-align:center">Tot in de <span class="imp">lucht</span>${voornaam?', '+esc(voornaam):''}.</h1>
-    <p class="q-help" style="margin-left:auto;margin-right:auto">We bekijken de beschikbaarheid en bezorgen je binnen 24u een voorstel met prijs op <b>${esc(state.email||'je e-mail')}</b>. Bij slecht weer boeken we gratis om.</p>
+    <p class="q-help" style="margin-left:auto;margin-right:auto">We bellen je binnenkort op${state.tel? ' op <b>'+esc(state.tel)+'</b>':''} om je vlucht te bespreken en te bevestigen. Bij slecht weer boeken we gratis om.</p>
   </div>`;
   backBtn.style.display='none'; nextBtn.style.display='none'; hint.style.visibility='hidden';
   stepCount.textContent='VERZONDEN';

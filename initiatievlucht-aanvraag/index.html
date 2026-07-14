@@ -123,6 +123,15 @@
   .cal-day:disabled{color:#d2d2d3; cursor:not-allowed;}
   .cal-day.sel{background:var(--red); color:#fff; border-color:var(--red);}
   .cal-empty{aspect-ratio:1;}
+  .suggest-label{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:26px; margin-bottom:12px;}
+  .date-suggest{display:flex; gap:10px; flex-wrap:wrap;}
+  .dsug{padding:11px 15px; border:1.5px solid var(--line-2); background:var(--white); border-radius:3px; cursor:pointer; font-family:inherit; text-align:left; line-height:1.25; color:var(--ink);}
+  .dsug small{display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);}
+  .dsug b{font-size:15px; font-weight:700;}
+  .dsug[aria-pressed="true"]{border-color:var(--red); background:var(--tint); color:var(--red);}
+  .dsug[aria-pressed="true"] small{color:var(--red);}
+  .suggest-note{font-size:12.5px; color:var(--muted); margin-top:12px;}
+  .cal-or{display:block; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:24px;}
   .toggle-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
   .chip{padding:11px 16px; border:1.5px solid var(--line-2); background:var(--white); border-radius:999px;
     font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; color:var(--ink);}
@@ -261,6 +270,22 @@ function esc(s){return (s||'').replace(/</g,'&lt;');}
 
 const MONTHS=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
 const DOW=['ma','di','wo','do','vr','za','zo'];
+// TODO: voorgestelde datums later voeden vanuit de CRM-planning/beschikbaarheid
+function suggestedDates(){
+  const out=[]; const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+1);
+  const dn=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  const mn=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  let guard=0;
+  while(out.length<4 && guard<60){ guard++;
+    const day=d.getDay();
+    if(day===6||day===0){
+      const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      out.push({iso, wd:dn[day], lbl:`${d.getDate()} ${mn[d.getMonth()]}`});
+    }
+    d.setDate(d.getDate()+1);
+  }
+  return out;
+}
 function initCal(){const t=new Date(); if(state.datum){const d=new Date(state.datum+'T00:00'); calYear=d.getFullYear(); calMonth=d.getMonth();} else {calYear=t.getFullYear(); calMonth=t.getMonth();}}
 function drawCal(){
   const wrap=document.getElementById('calWrap'); if(!wrap) return;
@@ -351,7 +376,10 @@ function render(){
     }
   }
   else if(step.type==='date'){
-    html+=`<div id="calWrap"></div><div class="toggle-row">
+    let sug='<span class="suggest-label">Voorgestelde momenten</span><div class="date-suggest">';
+    suggestedDates().forEach(s=>{ sug+=`<button class="dsug" data-iso="${s.iso}" aria-pressed="${state.datum===s.iso}"><small>${s.wd}</small><b>${s.lbl}</b></button>`; });
+    sug+='</div><p class="suggest-note">Onder voorbehoud — de definitieve datum bevestigen we op basis van onze planning.</p>';
+    html+=sug+`<span class="cal-or">Of kies zelf een datum</span><div id="calWrap"></div><div class="toggle-row">
       <button class="chip" id="flexChip" aria-pressed="${state.flexibel}">Ik ben flexibel / laat maar weten</button></div>`;
   }
   else if(step.type==='info'){
@@ -383,7 +411,9 @@ function render(){
   }
   html+='</div>'; stage.innerHTML=html;
 
-  if(step.type==='date'){ if(calYear===undefined) initCal(); drawCal(); }
+  if(step.type==='date'){ if(calYear===undefined) initCal(); drawCal();
+    stage.querySelectorAll('.dsug').forEach(b=>b.onclick=()=>{ state.datum=b.dataset.iso; state.flexibel=false; const dd=new Date(state.datum+'T00:00'); calYear=dd.getFullYear(); calMonth=dd.getMonth(); render(); });
+  }
   if(step.type==='profile'){
     const g=document.getElementById('gewicht'), l=document.getElementById('lengte');
     setSlider(g); setSlider(l);

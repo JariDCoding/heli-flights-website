@@ -224,7 +224,6 @@ function buildSteps(){
       {v:'gopro', b:'GoPro aan boord', s:'Legt de volledige vlucht vast — neemt geen plaats in'},
       {v:'cameraman', b:'Professionele cameraman', s:'Cinematische beelden (neemt één plaats in)'},
       {v:'reportage', b:'Fotoreportage op locatie', s:'Aankomst, landing en het moment op de grond'},
-      {v:'certificaat', b:'Vluchtcertificaat & souvenir', s:'Als aandenken aan de vlucht'},
     ]});
   s.push({id:'gelegenheid', type:'single', optional:true, label:'Gelegenheid', q:'Voor welke <span class="imp">gelegenheid</span>?',
     help:'Optioneel — helpt ons je vlucht persoonlijker te maken.',
@@ -370,7 +369,7 @@ function render(){
     let routeLabel = findLabel(routeSets[state.vertrek],state.route) ||
       ({'zelf':'Zelf uitgestippeld','advies':'Advies gevraagd'})[state.route] || '—';
     const vertrekLabel = ({'antwerpen':'Regio Antwerpen','kust':'Regio Kust','eigen':'Eigen locatie'})[state.vertrek]||'—';
-    const extrasLabel = state.extras.length ? state.extras.map(e=>({champagne:'Champagne',gopro:'GoPro',cameraman:'Cameraman',reportage:'Fotoreportage',certificaat:'Certificaat'})[e]).join(' · ') : 'Geen';
+    const extrasLabel = state.extras.length ? state.extras.map(e=>({champagne:'Champagne',gopro:'GoPro',cameraman:'Cameraman',reportage:'Fotoreportage'})[e]).join(' · ') : 'Geen';
     html += `<div class="summary">
       <div class="row"><span class="k">Vertrek</span><span class="v">${vertrekLabel}</span></div>
       <div class="row"><span class="k">Route</span><span class="v">${esc(routeLabel)}</span></div>

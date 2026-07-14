@@ -82,8 +82,8 @@
   .ac:hover{border-color:var(--line-2);}
   .ac:active{transform:translateY(1px);}
   .ac[aria-checked="true"]{border-color:var(--red);}
-  .ac-img{height:160px; background:var(--ground); overflow:hidden;}
-  .ac-img img{width:100%; height:100%; object-fit:cover; display:block;}
+  .ac-img{height:170px; background:var(--ground); overflow:hidden; display:flex; align-items:center; justify-content:center; padding:8px 14px;}
+  .ac-img img{max-width:100%; max-height:100%; object-fit:contain; display:block;}
   .ac-foot{display:flex; align-items:center; gap:14px; padding:16px 20px; border-top:1.5px solid var(--line);}
   .ac-main{flex:1;}
   .ac-name{font-weight:800; font-size:19px; letter-spacing:-.01em;}
@@ -229,7 +229,6 @@ function buildSteps(){
   s.push({id:'extras', phase:'Moment', type:'multi', label:'Moment', q:'Wil je er iets aan <span class="imp">toevoegen</span>?',
     help:'Optioneel — om er een compleet aandenken van te maken.',
     options:[
-      {v:'certificaat', b:'Vluchtcertificaat & logboekpagina', s:'Als aandenken aan je eerste vlucht'},
       {v:'fotovideo', b:'Foto & video', s:'Van je vlucht'},
     ]});
   s.push({id:'gelegenheid', phase:'Moment', type:'single', optional:true, label:'Moment', q:'Voor welke <span class="imp">gelegenheid</span>?',
@@ -371,7 +370,7 @@ function render(){
     const vertrekL=({basis:'Onze vaste basis',eigen:'Eigen locatie'})[state.vertrek]||'—';
     const toestelL=({r22:'Robinson R22',r44:'Robinson R44'})[state.toestel]||'—';
     const formuleL=({'30':'Briefing + 30 min zelf vliegen','60':'60 min — vliegen + sightseeing'})[state.formule]||'—';
-    const extrasL=state.extras.length?state.extras.map(e=>({certificaat:'Certificaat',fotovideo:'Foto & video'})[e]).join(' · '):'Geen';
+    const extrasL=state.extras.length?state.extras.map(e=>({fotovideo:'Foto & video'})[e]).join(' · '):'Geen';
     html+=`<div class="summary">
       <div class="row"><span class="k">Vertrek</span><span class="v">${vertrekL}</span></div>
       <div class="row"><span class="k">Vliegprofiel</span><span class="v">${state.gewicht} kg · ${state.lengte} cm</span></div>

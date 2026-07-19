@@ -24,8 +24,12 @@
     @media (max-width: 1120px) { [data-screen-label="Festival Flight"] { min-width: 0 !important; } }
     @media (max-width: 820px) {
       header nav { display: none !important; }
+      /* stack every multi-column grid to a single column on mobile */
+      [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+      /* cap image placeholders so empty/tall slots don't dominate the page */
+      image-slot { display: block !important; max-height: 220px !important; overflow: hidden !important; }
       .hf-cta-row { flex-wrap: wrap !important; }
-      .hf-stats { flex-wrap: wrap !important; gap: 18px 26px !important; }
+      .hf-stats { flex-wrap: wrap !important; gap: 16px 24px !important; }
       .hf-pricing { flex-direction: column !important; align-items: stretch !important; gap: 14px !important; }
     }
   </style>
@@ -231,7 +235,7 @@
           <div data-reveal="1" style="background: linear-gradient(165deg, rgba(173,4,4,0.24), rgba(173,4,4,0.05)); border: 1px solid rgba(255,80,80,0.45); border-radius: 20px; padding: 28px 26px; backdrop-filter: blur(10px);">
             <div style="font-family: Onest, sans-serif; font-weight: 800; font-size: 30px; color: #ff9a9a;">4</div>
             <h3 style="margin: 10px 0 0; font-family: Onest, sans-serif; font-weight: 700; font-size: 18px; color: #fff;">Private aircraft</h3>
-            <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: rgba(255,235,235,0.78);">Book all 4 seats and fly private with only your own group. Day: &euro;1.000 &#183; night: &euro;1.200.</p>
+            <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: rgba(255,235,235,0.78);">Book all 4 seats and fly private with only your own group. Day: &euro;1.400 &#183; night: &euro;1.800.</p>
           </div>
           <div data-reveal="1" style="background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.09); border-radius: 20px; padding: 28px 26px; backdrop-filter: blur(10px);">
             <div style="font-family: Onest, sans-serif; font-weight: 800; font-size: 30px; color: #ff5a5a;">4+</div>
